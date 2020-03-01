@@ -43,9 +43,8 @@ class Database(metaclass=ABCMeta):
         if not self.fetchOne(checkTableCmd):
             # Create tables
             for table in self.getTableList():
-                self.executeCmd(table.createTableCmd())
-                for indexCmd in table.createIndexCmds():
-                    self.executeCmd(indexCmd)
+                self.createTable(table)
+
             self.seed()
             self.commit()
 
@@ -53,6 +52,12 @@ class Database(metaclass=ABCMeta):
     @abstractmethod
     def seed(self):
         pass
+
+
+    def checkEntry(self, table, pk):
+        cmd = "SELECT * FROM {} WHERE {} = {}".format(table.getName(), table.getPk(), pk)
+        self.curs.execute(cmd)
+        return bool(self.curs.fetchone())
 
 
     def closeDB(self):
@@ -63,13 +68,28 @@ class Database(metaclass=ABCMeta):
         self.conn.commit()
 
 
+    def createTable(self, table):
+        self.executeCmd(table.createTableCmd())
+        for indexCmd in table.createIndexCmds():
+            self.executeCmd(indexCmd)
+
+
+    def drop(self, table):
+        self.curs.execute("DROP TABLE {}".format(table.getName()))
+
+
     def executeCmd(self, cmd, values=[]):
         self.curs.execute(cmd, values)
 
 
     def fetchItem(self, cmd, values=[]):
         self.executeCmd(cmd, values)
-        return self.curs.fetchone()[0]
+        item = None
+        try:
+            item = self.curs.fetchone()[0]
+        except TypeError:
+            pass
+        return item
 
 
     def fetchOne(self, cmd, values=[]):

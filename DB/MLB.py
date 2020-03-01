@@ -6,11 +6,8 @@ import unicodedata
 
 from itertools import chain
 
-from .Database import Database as DB
-from .Database import Table as TB
-import MLBProjections.MLBProjections.Environ as ENV
-from MLBProjections.MLBProjections.Utils.UpdateMixIn import UpdateMixIn
-import MLBProjections.MLBProjections.Utils.ResultParse as RP
+from .Database import Database as DB, Table as TB
+from ..Utils import ResultsParse as RP
 
 # for debugging
 from pprint import pprint
@@ -18,24 +15,21 @@ from pprint import pprint
 ################################################################################
 ################################################################################
 
+def yId(yahooId):
+    try:
+        return yahooId.split(".")[-1]
+    except AttributeError:
+        return "-1"
+
+
 def normal(name):
     name = unicodedata.normalize("NFD", name)
     name = "".join(c for c in name if not unicodedata.combining(c))
     return name
 
-### Meta Table
-metaTable = TB.Table("game_meta")
-    ### Primary Key
-metaTable.addPk("game_id", "INT")
-    ## Foreign Keys
-metaTable.addFk("home_id", "pro_teams", "team_id")
-metaTable.addFk("away_id", "pro_teams", "team_id")
-metaTable.addFk("stadium_id", "stadiums", "stadium_id")
-###############
-
 
 ### Games Table
-gamesTable = TB.Table("games")
+gamesTable = TB("games")
     ### Primary Key
 gamesTable.addPk("game_id", "INT")
     ## Foreign Keys
@@ -43,25 +37,26 @@ gamesTable.addFk("home_id", "pro_teams", "team_id")
 gamesTable.addFk("away_id", "pro_teams", "team_id")
 gamesTable.addFk("winner_id", "pro_teams", "team_id")
 gamesTable.addFk("loser_id", "pro_teams", "team_id")
-gamesTable.addFk("stadium_id", "stadiums", "stadium_id")
     ## Table Cols
 gamesTable.addCol("season", "INT")
+gamesTable.addCol("year", "INT")
 gamesTable.addCol("game_date", "REAL")
-gamesTable.addCol("season_type", "TEXT")
+gamesTable.addCol("game_type", "TEXT")
+gamesTable.addCol("game_time", "TEXT")
     ## Table Indexes
 gamesTable.addIndex("season_date", "season, game_date")
 ###############
 
 
 
+
 ### ProPlayers Table
-proPlayersTable = TB.Table("pro_players")
+proPlayersTable = TB("pro_players")
     ### Primary Key
 proPlayersTable.addPk("player_id", "INT")
     ## Table Cols
 proPlayersTable.addCol("first_name", "TEXT")
 proPlayersTable.addCol("last_name", "TEXT")
-proPlayersTable.addCol("pos", "INT")
 proPlayersTable.addCol("height", "INT", True)
 proPlayersTable.addCol("weight", "INT", True)
 proPlayersTable.addCol("bats", "TEXT")
@@ -78,23 +73,22 @@ proPlayersTable.addIndex("bats", "bats")
 
 
 ### ProTeams Table
-proTeamsTable = TB.Table("pro_teams")
+proTeamsTable = TB("pro_teams")
     ### Primary Key
 proTeamsTable.addPk("team_id", "INT")
-    ### Foreign Key
-proTeamsTable.addFk("stadium_id", "stadiums", "stadium_id")
     ## Table Cols
 proTeamsTable.addCol("abrv", "TEXT")
-proTeamsTable.addCol("city", "TEXT")
-proTeamsTable.addCol("mascot", "TEXT")
-proTeamsTable.addCol("league", "TEXT")
+proTeamsTable.addCol("first_name", "TEXT")
+proTeamsTable.addCol("last_name", "TEXT")
+proTeamsTable.addCol("conference", "TEXT")
 proTeamsTable.addCol("division", "TEXT")
-proTeamsTable.addCol("color", "TEXT")
+proTeamsTable.addCol("primary_color", "TEXT")
+proTeamsTable.addCol("secondary_color", "TEXT")
 ###############
 
 
 ### Stadiums Table
-stadiumsTable = TB.Table("stadiums")
+stadiumsTable = TB("stadiums")
     ### Primary Key
 stadiumsTable.addPk("stadium_id", "INT")
     ## Table Cols
@@ -102,41 +96,110 @@ stadiumsTable.addCol("title", "TEXT")
 ###############
 
 
-### PlayerStats Table
-playerStatsTable = TB.Table("player_stats")
+### BatterStats Table
+batterStatsTable = TB("batter_stats")
     ### Primary Key
-playerStatsTable.addPk("player_stat_id", "INT")
+batterStatsTable.addPk("batter_stat_id", "INT")
     ### Foreign Key
-playerStatsTable.addFk("game_id", "games", "game_id")
-playerStatsTable.addFk("player_id", "pro_players", "player_id")
-playerStatsTable.addFk("team_id", "pro_teams", "team_id")
-playerStatsTable.addFk("opp_id", "pro_teams", "team_id")
-playerStatsTable.addFk("stat_id", "stat_types", "stat_id")
+batterStatsTable.addFk("game_id", "games", "game_id")
+batterStatsTable.addFk("player_id", "pro_players", "player_id")
+batterStatsTable.addFk("team_id", "pro_teams", "team_id")
+batterStatsTable.addFk("opp_id", "pro_teams", "team_id")
     ## Table Cols
-playerStatsTable.addCol("value", "REAL")
+batterStatsTable.addCol("pa", "INT")
+batterStatsTable.addCol("ab", "INT")
+batterStatsTable.addCol("bb", "INT")
+batterStatsTable.addCol("r", "INT")
+batterStatsTable.addCol("h", "INT")
+batterStatsTable.addCol("dbl", "INT")
+batterStatsTable.addCol("tpl", "INT")
+batterStatsTable.addCol("hr", "INT")
+batterStatsTable.addCol("tb", "INT")
+batterStatsTable.addCol("rbi", "INT")
+batterStatsTable.addCol("sb", "INT")
+batterStatsTable.addCol("so", "INT")
+batterStatsTable.addCol("lob", "INT")
+batterStatsTable.addCol("hbp", "INT")
     ## Table Indexes
-playerStatsTable.addIndex("player_game_stats", "player_id, stat_id")
+batterStatsTable.addIndex("player_batter_stats", "player_id, game_id")
 ###############
 
 
-### TeamStats Table
-teamStatsTable = TB.Table("team_stats")
+### Pitcher Stats Table
+pitcherStatsTable = TB("pitcher_stats")
     ### Primary Key
-teamStatsTable.addPk("team_stat_id", "INT")
+pitcherStatsTable.addPk("pitcher_stat_id", "INT")
+    ### Foreign Key
+pitcherStatsTable.addFk("game_id", "games", "game_id")
+pitcherStatsTable.addFk("player_id", "pro_players", "player_id")
+pitcherStatsTable.addFk("team_id", "pro_teams", "team_id")
+pitcherStatsTable.addFk("opp_id", "pro_teams", "team_id")
+    ## Table Cols
+pitcherStatsTable.addCol("ip", "REAL")
+pitcherStatsTable.addCol("tot", "INT")
+pitcherStatsTable.addCol("strikes", "INT")
+pitcherStatsTable.addCol("gb", "INT")
+pitcherStatsTable.addCol("fb", "INT")
+pitcherStatsTable.addCol("bba", "INT")
+pitcherStatsTable.addCol("ha", "INT")
+pitcherStatsTable.addCol("ra", "INT")
+pitcherStatsTable.addCol("er", "INT")
+pitcherStatsTable.addCol("k", "INT")
+pitcherStatsTable.addCol("hra", "INT")
+pitcherStatsTable.addCol("hbp", "INT")
+pitcherStatsTable.addCol("w", "INT")
+pitcherStatsTable.addCol("l", "INT")
+pitcherStatsTable.addCol("sv", "INT")
+pitcherStatsTable.addCol("blsv", "INT")
+    ## Table Indexes
+pitcherStatsTable.addIndex("player_pitcher_stats", "player_id, game_id")
+###############
+
+
+### Team Stats Table
+teamStatsTable = TB("team_stats")
+    ### Primary Key
+teamStatsTable.addPk("team_stats_id", "INT")
     ### Foreign Key
 teamStatsTable.addFk("game_id", "games", "game_id")
 teamStatsTable.addFk("team_id", "pro_teams", "team_id")
 teamStatsTable.addFk("opp_id", "pro_teams", "team_id")
-teamStatsTable.addFk("stat_id", "stat_types", "stat_id")
     ## Table Cols
-teamStatsTable.addCol("value", "REAL")
+teamStatsTable.addCol("pa", "INT")
+teamStatsTable.addCol("ab", "INT")
+teamStatsTable.addCol("bb", "INT")
+teamStatsTable.addCol("r", "INT")
+teamStatsTable.addCol("h", "INT")
+teamStatsTable.addCol("dbl", "INT")
+teamStatsTable.addCol("tpl", "INT")
+teamStatsTable.addCol("hr", "INT")
+teamStatsTable.addCol("tb", "INT")
+teamStatsTable.addCol("rbi", "INT")
+teamStatsTable.addCol("sb", "INT")
+teamStatsTable.addCol("cs", "INT")
+teamStatsTable.addCol("so", "INT")
+teamStatsTable.addCol("lob", "INT")
+teamStatsTable.addCol("hbp", "INT")
+teamStatsTable.addCol("ip", "REAL")
+teamStatsTable.addCol("tot", "INT")
+teamStatsTable.addCol("strikes", "INT")
+teamStatsTable.addCol("gb", "INT")
+teamStatsTable.addCol("fb", "INT")
+teamStatsTable.addCol("bba", "INT")
+teamStatsTable.addCol("ha", "INT")
+teamStatsTable.addCol("ra", "INT")
+teamStatsTable.addCol("er", "INT")
+teamStatsTable.addCol("k", "INT")
+teamStatsTable.addCol("hra", "INT")
     ## Table Indexes
-teamStatsTable.addIndex("team_game_stats", "team_id, stat_id")
+teamStatsTable.addIndex("team_game_stats", "team_id, game_id")
+teamStatsTable.addIndex("opp_game_stats", "opp_id, game_id")
 ###############
 
 
+
 ### StatTypes Table
-statTypesTable = TB.Table("stat_types")
+statTypesTable = TB("stat_types")
     ### Primary Key
 statTypesTable.addPk("stat_id", "INT")
     ## Table Cols
@@ -147,7 +210,7 @@ statTypesTable.addCol("abrv", "TEXT")
 
 
 ### PitchTypes Table
-pitchTypesTable = TB.Table("pitch_types")
+pitchTypesTable = TB("pitch_types")
     ### Primary Key
 pitchTypesTable.addPk("pitch_type_id", "INT")
     ## Table Cols
@@ -156,7 +219,7 @@ pitchTypesTable.addCol("title", "TEXT")
 
 
 ### PitchResults Table
-pitchResultsTable = TB.Table("pitch_results")
+pitchResultsTable = TB("pitch_results")
     ### Primary Key
 pitchResultsTable.addPk("pitch_result_id", "INT")
     ## Table Cols
@@ -165,7 +228,7 @@ pitchResultsTable.addCol("title", "TEXT")
 
 
 ### PitchLocations Table
-pitchLocationsTable = TB.Table("pitch_locations")
+pitchLocationsTable = TB("pitch_locations")
     ### Primary Key
 pitchLocationsTable.addPk("pitch_location_id", "INT")
     ## Table Cols
@@ -179,7 +242,7 @@ pitchLocationsTable.addIndex("x_y", "x_value, y_value")
 
 
 ### Pitches Table
-pitchesTable = TB.Table("pitches")
+pitchesTable = TB("pitches")
     ### Primary Key
 pitchesTable.addPk("pitch_id","INT")
     ## Foreign Keys
@@ -203,7 +266,7 @@ pitchesTable.addIndex("batter_pitch", "batter_id, game_id")
 
 
 ### PitchContacts Table
-atBatResultsTable = TB.Table("ab_results")
+atBatResultsTable = TB("ab_results")
     ### Primary Key
 atBatResultsTable.addPk("ab_result_id","INT")
     ## Foreign Keys
@@ -227,7 +290,7 @@ atBatResultsTable.addIndex("batter_ab", "batter_id, game_id")
 
 
 ### AtBatTypes Table
-atBatTypesTable = TB.Table("ab_types")
+atBatTypesTable = TB("ab_types")
     ### Primary Key
 atBatTypesTable.addPk("ab_type_id", "INT")
     ### Table Cols
@@ -242,12 +305,13 @@ atBatTypesTable.addCol("start_base", "INT")
 
 
 ### Lineups Table
-lineupsTable = TB.Table("lineups")
+lineupsTable = TB("lineups")
     ### Primary Key
 lineupsTable.addPk("lineup_id", "INT")
     ### Foreign Keys
 lineupsTable.addFk("game_id", "games", "game_id")
 lineupsTable.addFk("team_id", "pro_teams", "team_id")
+lineupsTable.addFk("opp_id", "pro_teams", "team_id")
 lineupsTable.addFk("player_id", "pro_players", "player_id")
     ### Table Cols
 lineupsTable.addCol("batt_order", "INT")
@@ -257,7 +321,7 @@ lineupsTable.addCol("pos", "TEXT")
 
 
 ### Bullpens Table
-bullpensTable = TB.Table("bullpens")
+bullpensTable = TB("bullpens")
     ### Primary Key
 bullpensTable.addPk("bullpen_id", "INT")
     ### Foreign Keys
@@ -271,7 +335,7 @@ bullpensTable.addCol("pitch_order", "INT")
 
 
 ### dkYahoo Table
-dkYahooTable = TB.Table("dk_yahoo")
+dkYahooTable = TB("dk_yahoo")
     ### Table Cols
 dkYahooTable.addCol("dk_id", "TEXT")
 dkYahooTable.addCol("yahoo_id", "INT")
@@ -282,7 +346,7 @@ dkYahooTable.multiPk("yahoo_id, dk_id, team_id")
 
 
 ### dkTeam Table
-dkTeamTable = TB.Table("dk_team")
+dkTeamTable = TB("dk_team")
     ### Primary Key
 dkTeamTable.addPk("dk_id", "TEXT")
     ### Table Cols
@@ -291,7 +355,7 @@ dkTeamTable.addCol("team_id", "INT")
 
 
 ### dkSheet Table
-dkSheetTable = TB.Table("dk_sheets")
+dkSheetTable = TB("dk_sheets")
     ### Primary Key
 dkSheetTable.addPk("dk_sheet_id", "INT")
     ### Table Cols
@@ -303,7 +367,7 @@ dkSheetTable.addCol("game_date", "TEXT")
 
 
 ### dkSheetGames Table
-dkSheetGamesTable = TB.Table("dk_sheet_games")
+dkSheetGamesTable = TB("dk_sheet_games")
     ### Primary Key
 dkSheetGamesTable.addPk("dk_sheet_game_id", "INT")
     ### Foreign Keys
@@ -314,7 +378,7 @@ dkSheetGamesTable.addCol("game_id", "INT")
 
 
 ### dkSheetPlayers Table
-dkSheetPlayersTable = TB.Table("dk_sheet_players")
+dkSheetPlayersTable = TB("dk_sheet_players")
     ### Primary Key
 dkSheetPlayersTable.addPk("dk_sheet_player_id", "INT")
     ### Foreign Keys
@@ -324,7 +388,7 @@ dkSheetPlayersTable.addFk("dk_price_id", "dk_prices", "dk_price_id")
 
 
 ### dkPrice Table
-dkPriceTable = TB.Table("dk_prices")
+dkPriceTable = TB("dk_prices")
     ### Primary Key
 dkPriceTable.addPk("dk_price_id", "INT")
     ### Foreign Keys
@@ -443,6 +507,53 @@ statTypes = [{"stat_id": 1, "title": "Plate Appearance", "abrv": "PA"},
                 {"stat_id": 506, "title": "Earned Runs", "abrv": "ER"},
                 {"stat_id": 507, "title": "Home Runs", "abrv": "HRA"},
                 {"stat_id": 512, "title": "Full Innings Pitched", "abrv": "IP"}]
+
+
+positions = [{'pos_id': '21', 'abrv': 'SP', 'title': 'Starting Pitcher'},
+                {'pos_id': '22', 'abrv': 'RP', 'title': 'Relief Pitcher'},
+                {'pos_id': '23', 'abrv': 'CL', 'title': 'Closer'},
+                {'pos_id': '0', 'abrv': 'DH', 'title': 'Designated Hitter'},
+                {'pos_id': '1', 'abrv': 'P', 'title': 'Pitcher'},
+                {'pos_id': '2', 'abrv': 'C', 'title': 'Catcher'},
+                {'pos_id': '3', 'abrv': '1B', 'title': 'First Base'},
+                {'pos_id': '4', 'abrv': '2B', 'title': 'Second Base'},
+                {'pos_id': '5', 'abrv': '3B', 'title': 'Third Base'},
+                {'pos_id': '6', 'abrv': 'SS', 'title': 'Shortstop'},
+                {'pos_id': '7', 'abrv': 'LF', 'title': 'Left Field'},
+                {'pos_id': '8', 'abrv': 'CF', 'title': 'Center Field'},
+                {'pos_id': '9', 'abrv': 'RF', 'title': 'Right Field'}]
+
+
+teams = [{'abrv': 'TB', 'team_id': '30', 'conference': 'American League', 'division': 'East', 'primary_color': '092c5c', 'secondary_color': '8fbce6', 'first_name': 'Tampa Bay', 'last_name': 'Rays'},
+            {'abrv': 'WAS', 'team_id': '20', 'conference': 'National League', 'division': 'East', 'primary_color': '14225a', 'secondary_color': '14225a', 'first_name': 'Washington', 'last_name': 'Nationals'},
+            {'abrv': 'NYY', 'team_id': '10', 'conference': 'American League', 'division': 'East', 'primary_color': '003087', 'secondary_color': 'e4002c', 'first_name': 'New York', 'last_name': 'Yankees'},
+            {'abrv': 'NYM', 'team_id': '21', 'conference': 'National League', 'division': 'East', 'primary_color': '002d72', 'secondary_color': 'ff5910', 'first_name': 'New York', 'last_name': 'Mets'},
+            {'abrv': 'OAK', 'team_id': '11', 'conference': 'American League', 'division': 'West', 'primary_color': '003831', 'secondary_color': 'efb21e', 'first_name': 'Oakland', 'last_name': 'Athletics'},
+            {'abrv': 'PHI', 'team_id': '22', 'conference': 'National League', 'division': 'East', 'primary_color': 'e81828', 'secondary_color': '002d72', 'first_name': 'Philadelphia', 'last_name': 'Phillies'},
+            {'abrv': 'SEA', 'team_id': '12', 'conference': 'American League', 'division': 'West', 'primary_color': '0c2c56', 'secondary_color': '005c5c', 'first_name': 'Seattle', 'last_name': 'Mariners'},
+            {'abrv': 'PIT', 'team_id': '23', 'conference': 'National League', 'division': 'Central', 'primary_color': '27251f', 'secondary_color': 'fdb827', 'first_name': 'Pittsburgh', 'last_name': 'Pirates'},
+            {'abrv': 'TEX', 'team_id': '13', 'conference': 'American League', 'division': 'West', 'primary_color': '003278', 'secondary_color': 'c0111f', 'first_name': 'Texas', 'last_name': 'Rangers'},
+            {'abrv': 'STL', 'team_id': '24', 'conference': 'National League', 'division': 'Central', 'primary_color': 'c41e3a', 'secondary_color': '0c2340', 'first_name': 'St. Louis', 'last_name': 'Cardinals'},
+            {'abrv': 'TOR', 'team_id': '14', 'conference': 'American League', 'division': 'East', 'primary_color': '134a8e', 'secondary_color': '1d2d5c', 'first_name': 'Toronto', 'last_name': 'Blue Jays'},
+            {'abrv': 'SD', 'team_id': '25', 'conference': 'National League', 'division': 'West', 'primary_color': 'ffc72c', 'secondary_color': '2f241d', 'first_name': 'San Diego', 'last_name': 'Padres'},
+            {'abrv': 'ATL', 'team_id': '15', 'conference': 'National League', 'division': 'East', 'primary_color': 'ce1141', 'secondary_color': '13274f', 'first_name': 'Atlanta', 'last_name': 'Braves'},
+            {'abrv': 'SF', 'team_id': '26', 'conference': 'National League', 'division': 'West', 'primary_color': 'fd5a1e', 'secondary_color': '27251f', 'first_name': 'San Francisco', 'last_name': 'Giants'},
+            {'abrv': 'CHC', 'team_id': '16', 'conference': 'National League', 'division': 'Central', 'primary_color': '0e3386', 'secondary_color': 'cc3433', 'first_name': 'Chicago', 'last_name': 'Cubs'},
+            {'abrv': 'COL', 'team_id': '27', 'conference': 'National League', 'division': 'West', 'primary_color': '33006f', 'secondary_color': 'c4ced4', 'first_name': 'Colorado', 'last_name': 'Rockies'},
+            {'abrv': 'CIN', 'team_id': '17', 'conference': 'National League', 'division': 'Central', 'primary_color': 'c6011f', 'secondary_color': '000000', 'first_name': 'Cincinnati', 'last_name': 'Reds'},
+            {'abrv': 'MIA', 'team_id': '28', 'conference': 'National League', 'division': 'East', 'primary_color': '00a3e0', 'secondary_color': 'ef3340', 'first_name': 'Miami', 'last_name': 'Marlins'},
+            {'abrv': 'HOU', 'team_id': '18', 'conference': 'American League', 'division': 'West', 'primary_color': '002d62', 'secondary_color': 'eb6e1f', 'first_name': 'Houston', 'last_name': 'Astros'},
+            {'abrv': 'ARI', 'team_id': '29', 'conference': 'National League', 'division': 'West', 'primary_color': 'a71930', 'secondary_color': 'e3d4ad', 'first_name': 'Arizona', 'last_name': 'Diamondbacks'},
+            {'abrv': 'BAL', 'team_id': '1', 'conference': 'American League', 'division': 'East', 'primary_color': 'df4601', 'secondary_color': '000000', 'first_name': 'Baltimore', 'last_name': 'Orioles'},
+            {'abrv': 'LAD', 'team_id': '19', 'conference': 'National League', 'division': 'West', 'primary_color': '005a9c', 'secondary_color': 'a5acaf', 'first_name': 'Los Angeles', 'last_name': 'Dodgers'},
+            {'abrv': 'BOS', 'team_id': '2', 'conference': 'American League', 'division': 'East', 'primary_color': 'bd3039', 'secondary_color': '0c2340', 'first_name': 'Boston', 'last_name': 'Red Sox'},
+            {'abrv': 'LAA', 'team_id': '3', 'conference': 'American League', 'division': 'West', 'primary_color': '003263', 'secondary_color': 'ba0021', 'first_name': 'Los Angeles', 'last_name': 'Angels'},
+            {'abrv': 'CWS', 'team_id': '4', 'conference': 'American League', 'division': 'Central', 'primary_color': '27251f', 'secondary_color': 'c4ced4', 'first_name': 'Chicago', 'last_name': 'White Sox'},
+            {'abrv': 'CLE', 'team_id': '5', 'conference': 'American League', 'division': 'Central', 'primary_color': '0c2340', 'secondary_color': 'e31937', 'first_name': 'Cleveland', 'last_name': 'Indians'},
+            {'abrv': 'DET', 'team_id': '6', 'conference': 'American League', 'division': 'Central', 'primary_color': '0c2340', 'secondary_color': 'fa4616', 'first_name': 'Detroit', 'last_name': 'Tigers'},
+            {'abrv': 'KC', 'team_id': '7', 'conference': 'American League', 'division': 'Central', 'primary_color': '004687', 'secondary_color': 'bd9b60', 'first_name': 'Kansas City', 'last_name': 'Royals'},
+            {'abrv': 'MIL', 'team_id': '8', 'conference': 'National League', 'division': 'Central', 'primary_color': '0a2351', 'secondary_color': 'b6922e', 'first_name': 'Milwaukee', 'last_name': 'Brewers'},
+            {'abrv': 'MIN', 'team_id': '9', 'conference': 'American League', 'division': 'Central', 'primary_color': '002b5c', 'secondary_color': 'd31145', 'first_name': 'Minnesota', 'last_name': 'Twins'}]
 
 
 runnerResults = ("Stolen Base", "Wild Pitch", "Caught Stealing", "Passed Ball",
@@ -610,340 +721,29 @@ battContactsCmd = """
 ################################################################################
 
 
-class MLBDatabase(DB.Database, UpdateMixIn):
+class MLBDB(DB):
+
+    dbPath = os.environ["HOME"]+"/Yahoo/mlb/mlb.db"
 
     def __init__(self):
-        UpdateMixIn.__init__(self)
-        DB.Database.__init__(self, ENV.getPath("database", fileName="mlb"))
-
-
-    def getManagerKey(self):
-        return "dbEntries"
-
-
-    def update(self):
-        self.loadManagerFile()
-        if self.checkUpdate():
-            checkDate = self.getItem().date()
-            self.insertDates(checkDate)
-            self.updateManagerFile()
-            self.commit()
-
+        super().__init__(self.dbPath)
 
     def getTableList(self):
         return (gamesTable, proPlayersTable, proTeamsTable, stadiumsTable, lineupsTable,
-                playerStatsTable, teamStatsTable, statTypesTable, pitchTypesTable,
-                pitchResultsTable, pitchLocationsTable, pitchesTable, atBatTypesTable,
-                atBatResultsTable, bullpensTable)
-
-
-    def enterFileItems(self, itemType, itemTable):
-        itemPath = ENV.getPath(itemType).strip("None.json")
-        for itemFile in [itemPath+fileName for fileName in os.listdir(itemPath) if os.path.isfile(itemPath+fileName)]:
-            info = ENV.getJsonInfo(itemFile)
-            self.insert(itemTable, info=info)
-
-
-    def insertDates(self, checkDate):
-        for filePath in ENV.yearMonthDay(checkDate):
-            info = ENV.getJsonInfo(filePath+"scoreboard.json")
-            for gamePath in ["{}.json".format(filePath+game["game_id"]) for game in info["games"] if game["status"] == "final"]:
-                try:
-                    self.insertGame(gamePath)
-                except sqlite3.IntegrityError as e:
-                    print(e)
-
-
-    def insertGame(self, gamePath):
-
-        pitchTemp = {"HBP":0, "SB":0, "CS":0}
-        battTemp = {"PA":0,"HBP":0,"BB":0,"1B":0,"2B":0,"3B":0,"HR":0,"CS":0}
-        batters = {}
-        pitchers = {}
-        batActions = [x[0] for x in atBatResults]
-
-        print("Inserting {}".format(gamePath))
-
-        gameInfo = ENV.getJsonInfo(gamePath)
-
-        gameId = gameInfo["game_id"]
-        homeId = gameInfo["home_id"]
-        awayId = gameInfo["away_id"]
-
-        if gameInfo.get("season_type", None):
-            gameInfo["season_type"] = "reg"
-
-        playerList = [(player["player_id"], player) for player in gameInfo["players"]]
-        players = dict(zip([p[0] for p in playerList], [p[1] for p in playerList]))
-
-        # Games Table
-        self.insert(gamesTable, info=gameInfo)
-
-        # Lineups Table
-        for side in ("home", "away"):
-            for lineup in gameInfo["lineups"][side]["B"]:
-                lineupId = self.nextKey(lineupsTable)
-                lineup["lineup_id"] = lineupId
-                lineup["game_id"] = gameId
-                lineup["batt_order"] = lineup["order"]
-                lineup["team_id"] = gameInfo["{}_id".format(side)]
-                lineup["pos"] = lineup["position"][0]
-                self.insert(lineupsTable, info=lineup)
-
-            for lineup in gameInfo["lineups"][side]["P"]:
-                bullpenId = self.nextKey(bullpensTable)
-                lineup["bullpen_id"] = bullpenId
-                lineup["game_id"] = gameId
-                lineup["pitch_order"] = lineup["order"]
-                lineup["team_id"] = gameInfo["{}_id".format(side)]
-                oppSide = "away" if side == "home" else "home"
-                lineup["opp_id"] = gameInfo["{}_id".format(oppSide)]
-                self.insert(bullpensTable, info=lineup)
-
-
-        for key, values in gameInfo["playerStats"].items():
-            playerId = key.split(".")[-1]
-            try:
-                teamId = players[playerId]["team_id"]
-                oppId = homeId if teamId == awayId else awayId
-            except KeyError:
-                teamId = -1
-                oppId = -1
-            playerStats = {}
-
-            for group in values:
-                for statId, stat in group.items():
-                    statId = statId.split(".")[-1]
-                    playerStats[statId] = stat
-
-            for key, value in playerStats.items():
-                playerStatId = self.nextKey(playerStatsTable)
-                if int(key) not in (101, 102, 107):
-                    if int(key) == 139:
-                        inn,out = str(value).split(".")
-                        out = int(out)*3334
-                        value = float("{}.{}".format(inn,out))
-                    self.insert(playerStatsTable, values=[playerStatId, gameId, playerId, teamId, oppId, key, value])
-
-        for key, value in gameInfo.get("homeTeamStats", [{},])[0].items():
-            oppId = awayId
-            teamId = homeId
-            value = value
-            statId = key.split(".")[-1]
-
-            teamStatId = self.nextKey(teamStatsTable)
-            self.insert(teamStatsTable, values=[teamStatId, gameId, teamId, oppId, statId, value])
-
-        for key, value in gameInfo.get("awayTeamStats", [{},])[0].items():
-            oppId = homeId
-            teamId = awayId
-            value = value
-            statId = key.split(".")[-1]
-
-            teamStatId = self.nextKey(teamStatsTable)
-            self.insert(teamStatsTable, values=[teamStatId, gameId, teamId, oppId, statId, value])
-
-
-        pbp = gameInfo.get("play_by_play",{}).values()
-        pitches = gameInfo.get("pitches",{}).values()
-
-        for play in sorted(chain(pbp, pitches), key=lambda x: int(x["play_num"])):
-
-            info = {
-                        "game_id": gameId,
-                        "batter_id": play.get("batter",None),
-                        "pitcher_id": play.get("pitcher",None),
-                        "hit_angle": play.get("hit_angle",None),
-                        "hit_distance": play.get("hit_distance",None),
-                        "hit_hardness": play.get("hit_hardness",None),
-                        "hit_style": play.get("hit_style",None),
-                        "pitch_type_id": play.get("pitch_type", 7),
-                        "pitch_velocity": play.get("velocity", -1),
-                        "sequence": play.get("sequence",None),
-                        "play_num": play.get("play_num",None),
-                        "pitch_num": play.get("pitch_num",None),
-                        "balls": play.get("balls",None),
-                        "strikes": play.get("strikes",None),
-                        "pitch_result_id": play.get("result",None),
-                        "xValue": play.get("horizontal", None),
-                        "yValue": play.get("vertical", None)
-                    }
-            if int(play.get("balls", 0)) > 3:
-                info["balls"] = 3
-            if int(play.get("strikes", 0)) > 2:
-                info["strikes"] = 2
-
-
-
-
-            if play["play_type"] == "PITCH":
-                pitcherId = info["pitcher_id"]
-                batterId = info["batter_id"]
-
-
-                # Table column entries
-                pitchId = self.nextKey(pitchesTable)
-                try:
-                    locationId = self.getKey(pitchLocationsTable, x_value=info["xValue"], y_value =info["yValue"])
-                except sqlite3.OperationalError:
-                    locationId = -1
-                # Entering column values into info dictionary
-                for key, value in (("pitch_id", pitchId), ("pitch_location_id", locationId)):
-                    info[key] = value
-
-                self.insert(pitchesTable, info=info)
-
-
-            if play["play_type"] == "RESULT":
-                action, _, _ = RP.parseAtBat(play["text"])
-                for i, abResult in enumerate(atBatResults):
-                    if abResult[0] == action:
-                        # print(action)
-                        info["ab_result_id"] = self.nextKey(atBatResultsTable)
-                        info["ab_type_id"] = i
-                        info["pitch_id"] = pitchId
-
-                        self.insert(atBatResultsTable, info=info)
-
-                if action in batActions:
-                    batterId = play["batter"]
-                    pitcherId = play["pitcher"]
-
-                    batterStats = batters.get(batterId, battTemp.copy())
-                    pitcherStats = pitchers.get(pitcherId, pitchTemp.copy())
-
-                    batterStats["PA"] += 1
-                    if action in ("Single", "Double", "Triple", "Home Run"):
-                        if action == "Single":
-                            batterStats["1B"] += 1
-                        if action == "Double":
-                            batterStats["2B"] += 1
-                        if action == "Triple":
-                            batterStats["3B"] += 1
-                        if action == "Home Run":
-                            batterStats["HR"] += 1
-
-                    if action == "Hit by Pitch":
-                        pitcherStats["HBP"] += 1
-                        batterStats["HBP"] += 1
-
-                    batters[batterId] = batterStats
-                    pitchers[pitcherId] = pitcherStats
-
-        for playerId, values in batters.items():
-            try:
-                teamId = players[playerId]["team_id"]
-                oppId = homeId if teamId == awayId else awayId
-            except KeyError:
-                teamId = -1
-                oppId = -1
-
-            # PA
-            playerStatId = self.nextKey(playerStatsTable)
-            self.insert(playerStatsTable, values=[playerStatId, gameId, playerId, teamId, oppId, 1, values["PA"]])
-            # Singles
-            playerStatId = self.nextKey(playerStatsTable)
-            self.insert(playerStatsTable, values=[playerStatId, gameId, playerId, teamId, oppId, 15, values["1B"]])
-            # Doubles
-            playerStatId = self.nextKey(playerStatsTable)
-            self.insert(playerStatsTable, values=[playerStatId, gameId, playerId, teamId, oppId, 5, values["2B"]])
-            # Triples
-            playerStatId = self.nextKey(playerStatsTable)
-            self.insert(playerStatsTable, values=[playerStatId, gameId, playerId, teamId, oppId, 6, values["3B"]])
-            # HBP
-            playerStatId = self.nextKey(playerStatsTable)
-            self.insert(playerStatsTable, values=[playerStatId, gameId, playerId, teamId, oppId, 9, values["HBP"]])
-            # Total Bases
-            playerStatId = self.nextKey(playerStatsTable)
-            totalBases = int(values["1B"]) + (int(values["2B"])*2) +(int(values["3B"])*3) + (int(values["HR"])*4)
-            self.insert(playerStatsTable, values=[playerStatId, gameId, playerId, teamId, oppId, 10, totalBases])
-            # Caught Stealing
-            playerStatId = self.nextKey(playerStatsTable)
-            self.insert(playerStatsTable, values=[playerStatId, gameId, playerId, teamId, oppId, 13, values["CS"]])
-
-        for playerId, values in pitchers.items():
-            try:
-                teamId = players[playerId]["team_id"]
-                oppId = homeId if teamId == awayId else awayId
-            except KeyError:
-                teamId = -1
-                oppId = -1
-
-            # HBP
-            playerStatId = self.nextKey(playerStatsTable)
-            self.insert(playerStatsTable, values=[playerStatId, gameId, playerId, teamId, oppId, 119, values["HBP"]])
-            # Stolen Bases
-            playerStatId = self.nextKey(playerStatsTable)
-            self.insert(playerStatsTable, values=[playerStatId, gameId, playerId, teamId, oppId, 122, values["SB"]])
-            # Caught Stealing
-            playerStatId = self.nextKey(playerStatsTable)
-            self.insert(playerStatsTable, values=[playerStatId, gameId, playerId, teamId, oppId, 123, values["CS"]])
-
-            # W
-            result =  int(playerId) == int(gameInfo["byline"]["winning_pitcher"].split(".")[-1])
-            playerStatId = self.nextKey(playerStatsTable)
-            self.insert(playerStatsTable, values=[playerStatId, gameId, playerId, teamId, oppId, 101, result])
-            # L
-            result = int(playerId) == int(gameInfo["byline"]["losing_pitcher"].split(".")[-1])
-            playerStatId = self.nextKey(playerStatsTable)
-            self.insert(playerStatsTable, values=[playerStatId, gameId, playerId, teamId, oppId, 102, result])
-            # SV
-            result = int(playerId) == int(gameInfo["byline"].get("saving_pitcher", "-11").split(".")[-1])
-            playerStatId = self.nextKey(playerStatsTable)
-            self.insert(playerStatsTable, values=[playerStatId, gameId, playerId, teamId, oppId, 107, result])
-
-
-
-
-
-        for play in gameInfo["play_by_play"].values():
-            if play["play_type"] == "RUNNER":
-                action = RP.parseRunner(play["text"])
-                if action in ("Stolen Base", "Caught Stealing"):
-                    index = str(int(play["play_num"]) -1)
-                    runnerId = play["players"]
-                    try:
-                        pitcherId = gameInfo["pitches"][index]["pitcher"]
-                    except KeyError:
-                        pitcherId = -1
-                    batterStats = batters.get(runnerId, battTemp.copy())
-                    pitcherStats = pitchers.get(pitcherId, pitchTemp.copy())
-
-                    if action == "Stolen Base":
-                        pitcherStats["SB"] += 1
-                    else:
-                        pitcherStats["CS"] += 1
-                        batterStats["CS"] += 1
-
-                    batters[runnerId] = batterStats
-                    pitchers[pitcherId] = pitcherStats
-
-
-
-
-
-
+                batterStatsTable, pitcherStatsTable, teamStatsTable,
+                statTypesTable, pitchTypesTable, pitchResultsTable, pitchLocationsTable,
+                pitchesTable, atBatTypesTable, atBatResultsTable, bullpensTable)
 
 
 
 
     def seed(self):
 
-        self.clearManagerFile()
-
-        itemPath = ENV.getPath("player").strip("None.json")
-        for itemFile in [itemPath+fileName for fileName in os.listdir(itemPath) if os.path.isfile(itemPath+fileName)]:
-            info = ENV.getJsonInfo(itemFile)
-            info["first_name"] = normal(info["first_name"])
-            info["last_name"] = normal(info["last_name"])
-            self.insert(proPlayersTable, info=info)
-
-        self.enterFileItems("team", proTeamsTable)
-        self.enterFileItems("stadium", stadiumsTable)
+        for team in teams:
+            self.insert(proTeamsTable, info=team)
 
         for stat in statTypes:
             self.insert(statTypesTable, info=stat)
-
 
         self.insert(pitchLocationsTable, values=(-1, -1, -1, -1, False))
         for i, location in enumerate(pitchLocations):
@@ -960,27 +760,3 @@ class MLBDatabase(DB.Database, UpdateMixIn):
 
 
         self.commit()
-
-
-
-################################################################################
-################################################################################
-
-
-class MLBDFS(DB.Database):
-
-    def __init__(self):
-        super().__init__(ENV.getPath("dfs"))
-
-
-    def getTableList(self):
-        return (dkYahooTable, dkTeamTable, dkPriceTable, dkSheetTable,
-                dkSheetGamesTable, dkSheetPlayersTable)
-
-
-    def seed(self):
-        pass
-
-
-################################################################################
-################################################################################

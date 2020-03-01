@@ -108,7 +108,7 @@ oddsTable.addIndex("odds_games", "game_id")
 felsonLeagues = (   # abrv, name, espn_slug, yahoo_slug, espn_id, yahoo_id
                     ("nfl", "National Football League", "nfl", "nfl", 28, "nfl"),
                     ("nba", "National Basketball Association", "nba", "nba", 46, "nba"),
-                    ),
+                    ("mlb", "Major League Baseball", "mlb", "mlb", 10, "mlb"),
                     ("ncaab", "NCAA College Basketball", "mens-college-basketball", "college-basketball", 41, "ncaab"),
                     ("ncaaf", "NCAA College Football", "college-football", "college-football", 23, "ncaaf")
                 )

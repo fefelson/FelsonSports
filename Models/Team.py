@@ -1,14 +1,15 @@
 import datetime
+import os
 
 from ..Utils import SQL
 
-from pprint import pprint
+# from pprint import pprint
 
 ################################################################################
 ################################################################################
 
 
-
+logoPath = os.environ["HOME"] + "/Yahoo/{}/teams/{}.png"
 
 
 ################################################################################
@@ -109,6 +110,10 @@ class Team:
         return self.model.getStats(statType, stat)
 
 
+    def getLogoPath(self):
+        raise AssertionError
+
+
 
 
 ################################################################################
@@ -119,6 +124,10 @@ class NBATeam(Team):
 
     def __init__(self, model, teamId):
         super().__init__(model, teamId)
+
+
+    def getLogoPath(self):
+        return logoPath.format("nba", self.teamId)
 
 
     def setInfo(self):
@@ -168,6 +177,10 @@ class NCAABTeam(Team):
 
     def __init__(self, model, teamId):
         super().__init__(model, teamId)
+
+
+    def getLogoPath(self):
+        return logoPath.format("ncaab", self.teamId)
 
 
     def setInfo(self):

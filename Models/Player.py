@@ -1,5 +1,10 @@
-from abc import ABCMeta, abstractmethod
-from ..Utils import SQL
+import re
+
+from .. import Environ as ENV
+from ..Interfaces import Downloadable, Fileable
+from ..Models import normal, yId
+
+from pprint import pprint
 
 ################################################################################
 ################################################################################
@@ -13,62 +18,50 @@ from ..Utils import SQL
 ################################################################################
 
 
-class Player(metaclass=ABCMeta):
+class Player(Downloadable, Fileable):
 
-    def __init__(self, model, playerId):
+    _info = None
 
-        self.model = model
+
+    def __init__(self, *args, **kwargs):
+        Downloadable.__init__(self, *args, **kwargs)
+        Fileable.__init__(self, self._info, *args, **kwargs)
+
+        self.playerId = None
+
+        # pprint(self.info)
+
+
+    def create(self, playerId):
+        print("New {} Player {}".format(self.info["leagueId"], playerId))
         self.playerId = playerId
+        self.setUrl()
+        self.setFilePath()
 
-        self.info = {}
-
-        self.positions = []
-
-        self.stats = {}
-
-        self.setInfo()
-        self.setStats()
-
-
-    def __str__(self):
-        return " ".join((self.info["firstName"], self.info["lastName"]))
-
-
-    def __repr__(self):
-        return " ".join((self.info["firstName"], self.info["lastName"]))
-
-
-    def getId(self):
-        return self.playerId
-
-
-    def getInfo(self, label):
-        return self.info[label]
-
-
-    def setStats(self):
-        timeFrame = self.model.getTimeFrame()
-        db = self.model.getDB()
-        gdCmd = self.model.gdDict[timeFrame]
-        playerStats = dict(zip(("mins", "fga", "fgm", "fta", "ftm", "tpa", "tpm", "pts", "reb", "ast",
-                                    "stl", "blk", "trn", "fls", "score"), db.fetchOne(SQL.playerAvgStats.format({"gdCmd":gdCmd, "scoreWhereCmd": "WHERE ps.player_id = ?"}), (self.playerId,))))
-        self.stats[timeFrame] = playerStats
-
-
-    def getStats(self, stat):
-        timeFrame = self.model.getTimeFrame()
         try:
-            playerStats = self.stats[timeFrame]
-        except KeyError:
-            self.setStats()
-            playerStats = self.stats[timeFrame]
-        return playerStats[stat]
+            self.read()
+        except FileNotFoundError:
+            self.parseData()
+            self.write()
+        pprint(self.info)
+
+    def setFilePath(self):
+        self.filePath = ENV.playerFilePath.format(self.info, self.playerId)
 
 
 
+    def setUrl(self):
+        self.url = ENV.playerUrl.format(self.info, self.playerId)
 
 
+    def parseData(self):
+        stores = self.downloadItem()
+        entityId = stores["PageStore"]["pageData"]["entityId"]
+        player = stores["PlayersStore"]["players"][entityId]
 
+        player["draft_team"].pop("team")
+        pprint(player)
+        raise
 
 ################################################################################
 ################################################################################
@@ -76,15 +69,170 @@ class Player(metaclass=ABCMeta):
 
 class NBAPlayer(Player):
 
-    def __init__(self, model, playerId):
-        super().__init__(model, playerId)
+    _info = {
+                "leagueId": "nba",
+                "slugId": "nba",
+                "player_id": -1,
+                "first_name": "N/A",
+                "last_name": "N/A",
+                "bio": {},
+                "draft": {},
+                "pos_id": -1,
+                "headshot": None
+            }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
-    def setInfo(self):
-        db = self.model.getDB()
-        self.info["firstName"], self.info["lastName"] = db.fetchOne("SELECT first_name, last_name FROM pro_players WHERE player_id = ?", (self.playerId,))
-        self.info["pos"] = [x[0] for x in db.fetchAll("SELECT pt.abrv FROM players_positions AS pp INNER JOIN position_types AS pt ON pp.pos_id = pt.pos_id WHERE player_id = ?", (self.playerId,))]
+    def parseData(self):
+        stores = self.downloadItem()
+        entityId = stores["PageStore"]["pageData"]["entityId"]
+        player = stores["PlayersStore"]["players"][entityId]
+        try:
+            player["draft_team"].pop("team")
+            player["draft_team"]["team_id"] = yId(player["draft_team"]["team_id"])
+        except:
+            player["draft_team"] = {}
 
+        self.info["player_id"] = yId(player["player_id"])
+        self.info["first_name"] = normal(player["first_name"])
+        self.info["last_name"] = normal(player["last_name"])
+        self.info["bio"] = player["bio"]
+        self.info["draft"] = player["draft_team"]
+        self.info["pos_id"] = yId(player["primary_position_id"])
+        try:
+            self.info["headshot"] = re.search("https://s.yimg.com/xe/i/us/sp/v/nba_cutout/players_l/\d*/\d*.png", player["image"]).group(0)
+        except AttributeError:
+            pass
+
+        pprint(self.info)
+
+################################################################################
+################################################################################
+
+
+class MLBPlayer(Player):
+
+    _info = {
+                "leagueId": "mlb",
+                "slugId": "mlb",
+                "player_id": -1,
+                "first_name": "N/A",
+                "last_name": "N/A",
+                "bio": {},
+                "draft": {},
+                "bat": "N/A",
+                "throw": "N/A",
+                "pos_id": -1,
+                "headshot": None
+            }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+
+    def parseData(self):
+        stores = self.downloadItem()
+        entityId = stores["PageStore"]["pageData"]["entityId"]
+        player = stores["PlayersStore"]["players"][entityId]
+        try:
+            player["draft_team"].pop("team")
+            player["draft_team"]["team_id"] = yId(player["draft_team"]["team_id"])
+        except KeyError:
+            player["draft_team"] = {}
+
+        self.info["player_id"] = yId(player["player_id"])
+        self.info["first_name"] = normal(player["first_name"])
+        self.info["last_name"] = normal(player["last_name"])
+        self.info["bio"] = player["bio"]
+        self.info["draft"] = player["draft_team"]
+        self.info["bat"] = player["bat"]
+        self.info["throw"] = player["throw"]
+        self.info["pos_id"] = yId(player["primary_position_id"])
+        try:
+            self.info["headshot"] = re.search("https://s.yimg.com/xe/i/us/sp/v/mlb_cutout/players_l/\d*/\d*.png", player["image"]).group(0)
+        except:
+            pass
+
+
+################################################################################
+################################################################################
+
+
+class NFLPlayer(Player):
+
+    _info = {
+                "leagueId": "nfl",
+                "slugId": "nfl",
+                "player_id": -1,
+                "first_name": "N/A",
+                "last_name": "N/A",
+                "bio": {},
+                "draft": {},
+                "pos_id": -1,
+                "headshot": None
+            }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+
+    def parseData(self):
+        stores = self.downloadItem()
+        entityId = stores["PageStore"]["pageData"]["entityId"]
+        player = stores["PlayersStore"]["players"][entityId]
+        try:
+            player["draft_team"].pop("team")
+            player["draft_team"]["team_id"] = yId(player["draft_team"]["team_id"])
+        except KeyError:
+            player["draft_team"] = {}
+
+        self.info["player_id"] = yId(player["player_id"])
+        self.info["first_name"] = normal(player["first_name"])
+        self.info["last_name"] = normal(player["last_name"])
+        self.info["bio"] = player["bio"]
+        self.info["draft"] = player["draft_team"]
+        self.info["pos_id"] = yId(player["primary_position_id"])
+        try:
+            self.info["headshot"] = re.search("https://s.yimg.com/xe/i/us/sp/v/nfl_cutout/players_l/\d*/\d*.png", player["image"]).group(0)
+        except:
+            pass
+
+################################################################################
+################################################################################
+
+
+class NCAAFPlayer(Player):
+
+    _info = {
+                "leagueId": "ncaaf",
+                "slugId": "ncaaf",
+                "player_id": -1,
+                "first_name": "N/A",
+                "last_name": "N/A",
+                "bio": {},
+                "pos_id": -1,
+                "team_id": -1,
+                "uni_num": -1
+            }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+
+    def parseData(self):
+        stores = self.downloadItem()
+        entityId = stores["PageStore"]["pageData"]["entityId"]
+        player = stores["PlayersStore"]["players"][entityId]
+
+        self.info["player_id"] = yId(player["player_id"])
+        self.info["first_name"] = normal(player["first_name"])
+        self.info["last_name"] = normal(player["last_name"])
+        self.info["bio"] = player["bio"]
+        self.info["pos_id"] = yId(player["primary_position_id"])
+        self.info["team_id"] = yId(player["team_id"])
+        self.info["uni_num"] = player["uniform_number"]
 
 
 ################################################################################
@@ -93,15 +241,31 @@ class NBAPlayer(Player):
 
 class NCAABPlayer(Player):
 
-    def __init__(self, model, playerId):
-        super().__init__(model, playerId)
+    _info = {
+                "leagueId": "ncaab",
+                "slugId": "ncaab",
+                "player_id": -1,
+                "first_name": "N/A",
+                "last_name": "N/A",
+                "bio": {},
+                "pos_id": -1,
+                "team_id": -1,
+                "uni_num": -1
+            }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
-    def setInfo(self):
-        db = self.model.getDB()
-        try:
-            self.info["firstName"], self.info["lastName"], self.info["pos"] = db.fetchOne("SELECT first_name, last_name, abrv FROM col_players AS cp INNER JOIN position_types AS pt ON cp.pos_id = pt.pos_id WHERE player_id = ?", (self.playerId,))
-        except:
-            self.info["firstName"] = "N/A"
-            self.info["lastName"] = "N/A"
-            self.info["pos"] = "N/A"
+    def parseData(self):
+        stores = self.downloadItem()
+        entityId = stores["PageStore"]["pageData"]["entityId"]
+        player = stores["PlayersStore"]["players"][entityId]
+
+        self.info["player_id"] = yId(player["player_id"])
+        self.info["first_name"] = normal(player["first_name"])
+        self.info["last_name"] = normal(player["last_name"])
+        self.info["bio"] = player["bio"]
+        self.info["pos_id"] = yId(player["primary_position_id"])
+        self.info["team_id"] = yId(player["team_id"])
+        self.info["uni_num"] = player["uniform_number"]

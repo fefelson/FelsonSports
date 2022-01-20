@@ -3,6 +3,14 @@ import re
 ################################################################################
 ################################################################################
 
+def yId(yahooId):
+    try:
+        return yahooId.split(".")[-1]
+    except AttributeError:
+        return "-1"
+
+
+
 playerPattern = re.compile("mlb.p.(?P<playerId>\d*)")
 parenPattern = re.compile("\(.*?\)")
 

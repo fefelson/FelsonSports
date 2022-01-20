@@ -42,8 +42,8 @@ class DatabaseManager(metaclass=ABCMeta):
         INPUTS ARE NOT VALIDATED HERE
     """
 
-    _schema = None
     _dbPath = ENV.dbPath
+    _schema = None
 
 
     def __init__(self, dbPath):
@@ -53,20 +53,25 @@ class DatabaseManager(metaclass=ABCMeta):
 
         self.dbPath = dbPath
         if not os.path.exists(dbPath):
-            os.makedirs("/".join(self.dbPath.split("/")[:-1]))
+
+            print("Creating new Database ", self.dbPath, "\n")
+            try:
+                os.makedirs("/".join(self.dbPath.split("/")[:-1]))
+            except FileExistsError:
+                pass
+
             self.openDB()
-            self.create()
+            for line in self._schema:
+                # print(line,"\n")
+                self.curs.execute(line)
+
             self.seed()
+            self.conn.commit()
             self.closeDB()
 
 
-    def create(self):
-        for line in self._schema:
-            self.curs.execute(line)
-        self.conn.commit()
-
-
     def openDB(self):
+        # print("opening DB\n")
         self.conn = sqlite3.connect(self.dbPath)
         self.curs = self.conn.cursor()
 
@@ -85,13 +90,18 @@ class DatabaseManager(metaclass=ABCMeta):
         pk = self.fetchOne("PRAGMA table_info({})".format(table))[1]
         cmd = "SELECT * FROM {} WHERE {} = {}".format(table, pk, item)
         self.curs.execute(cmd)
-        answer = bool(self.curs.fetchone())
-        return answer
+        return bool(self.curs.fetchone())
 
 
     def closeDB(self):
-        self.cursor.close()
+        # print("closing db\n")
+        self.curs.close()
         self.conn.close()
+
+
+    def commit(self):
+        print("committing to db\n")
+        self.conn.commit()
 
 
     def executeCmd(self, cmd, values=[]):
@@ -125,6 +135,7 @@ class DatabaseManager(metaclass=ABCMeta):
         cols = "({})".format(",".join(colNames)) if colNames else ""
         qMarks = ",".join(["?" for x in values])
         self.executeCmd(insertCmd.format({"qMarks": qMarks, "table": table, "cols":cols}), values)
+
 
 
     def nextKey(self, table):
@@ -161,33 +172,42 @@ class DatabaseManager(metaclass=ABCMeta):
 
 
     def insertPlayers(self):
-        print("insertPlayers function")
-        tar = tarfile.open("/home/ededub/FEFelson/{}/players.tar.gz".format(self._abrv))
-        tar.extractall("/home/ededub/FEFelson/{}/temp".format(self._abrv))
+        tar = tarfile.open(ENV.tarPath.format(self._abrv, "players"))
+        tar.extractall(ENV.tempDir.format(self._abrv))
         tar.close()
 
-        for player in ["/home/ededub/FEFelson/{}/temp/".format(self._abrv)+ x for x in os.listdir("/home/ededub/FEFelson/{}/temp".format(self._abrv))]:
-            print(player)
+        for player in [ENV.tempDir.format(self._abrv)+ x for x in os.listdir(ENV.tempDir.format(self._abrv))]:
             with open(player) as fileIn:
                 info = json.load(fileIn)
             self.insertPlayer(info)
-        [os.remove("/home/ededub/FEFelson/{}/temp/".format(self._abrv)+ x) for x in os.listdir("/home/ededub/FEFelson/{}/temp".format(self._abrv))]
+        [os.remove(ENV.tempDir.format(self._abrv)+ "/{}".format(x)) for x in os.listdir(ENV.tempDir.format(self._abrv))]
+
+
+    def insertPlayer(self, info):
+
+        info["first_name"] = normal(info["first_name"])
+        info["last_name"] = normal(info["last_name"])
+        self.insert("players", info=info)
 
 
 
     def insertBoxScores(self):
 
-        tar = tarfile.open("/home/ededub/FEFelson/{}/boxscores.tar.gz".format(self._abrv))
-        tar.extractall("/home/ededub/FEFelson/{}/temp".format(self._abrv))
+        tar = tarfile.open(ENV.tarPath.format(self._abrv, "boxscores"))
+        tar.extractall(ENV.tempDir.format(self._abrv))
         tar.close()
 
         fileList = []
-        for filePath, _, fileNames in os.walk("/home/ededub/FEFelson/{}/temp".format(self._abrv)):
-            [fileList.append(filePath+"/"+fileName) for fileName in fileNames if fileName != "scoreboard.json" and fileName[0] != "M"]
-
-        for filePath, _, fileNames in os.walk("/home/ededub/FEFelson/{}/{}".format(self._abrv, self._season)):
-            print(fileList)
+        for filePath, _, fileNames in os.walk(ENV.tempDir.format(self._abrv)):
             [fileList.append(filePath+"/"+fileName) for fileName in fileNames if fileName != "scoreboard.json" and fileName != "schedule.json" and fileName[0] != "M"]
+
+
+        try:
+            curSeason = [ENV.homePath+"{}/".format(self._abrv)+x for x in os.listdir(ENV.homePath+"{}/".format(self._abrv)) if os.path.isdir(ENV.homePath+"{}/".format(self._abrv)+x) and x[0] == "2"][0]
+            for filePath, _, fileNames in os.walk(curSeason):
+                [fileList.append(filePath+"/"+fileName) for fileName in fileNames if fileName != "scoreboard.json" and fileName != "schedule.json" and fileName[0] != "M"]
+        except IndexError:
+            pass
 
         for fileName in sorted(fileList, key=lambda x: int(x.split("/")[-1].split(".")[0])):
             print(fileName)
@@ -196,7 +216,7 @@ class DatabaseManager(metaclass=ABCMeta):
                     self.insertGame(json.load(fileIn))
                 except json.decoder.JSONDecodeError:
                     pass
-        [shutil.rmtree("/home/ededub/FEFelson/{}/temp/".format(self._abrv)+ x) for x in os.listdir("/home/ededub/FEFelson/{}/temp".format(self._abrv))]
+        [shutil.rmtree(ENV.tempDir.format(self._abrv)+"/{}".format(x)) for x in os.listdir(ENV.tempDir.format(self._abrv))]
 
 
 

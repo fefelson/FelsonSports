@@ -46,12 +46,118 @@ class Game(metaclass=ABCMeta):
         return self.gameId
 
 
+    def getCommonOpp(self, hA):
+        timeFrame = self.model.getTimeFrame()
+        db = self.model.getDB()
+        gdCmd = self.model.gdDict[timeFrame]
+
+        if hA == "all":
+            homeCmd = SQL.oppCmd.format({"gdCmd": gdCmd, "oppAndCmd": "", "teamId": self.teams["home"].getId()})
+            awayCmd = SQL.oppCmd.format({"gdCmd": gdCmd, "oppAndCmd": "", "teamId": self.teams["away"].getId()})
+        else:
+            homeCmd = SQL.oppCmd.format({"gdCmd": gdCmd, "oppAndCmd": " AND gd.home_id ="+str(self.teams["home"].getId()), "teamId": self.teams["home"].getId()})
+            awayCmd = SQL.oppCmd.format({"gdCmd": gdCmd, "oppAndCmd": " AND gd.away_id ="+str(self.teams["away"].getId()), "teamId": self.teams["away"].getId()})
+
+        cmd = SQL.commOppCmd.format({"oppHome": homeCmd, "oppAway": awayCmd})
+        return db.fetchAll(cmd)
+
+
+    def getCommonStats(self, hA):
+        comOpps = [x[0] for x in self.getCommonOpp(hA)]
+        teamStats = {}
+        for homeA in ("away", "home"):
+            if hA == "all":
+                teamStats[homeA] = self.getCommonTeamStats("all", self.teams[homeA].getId(), comOpps)
+            else:
+                teamStats[homeA] = self.getCommonTeamStats(homeA, self.teams[homeA].getId(), comOpps)
+        return teamStats
+
+
+    def getCommonTeamStats(self, hA, teamId, comOpps):
+        timeFrame = self.model.getTimeFrame()
+        db = self.model.getDB()
+        gdCmd = self.model.gdDict[timeFrame]
+        statAbrvs = ("pts", "fga", "fgPct", "fta", "ftPct", "tpa", "tpPct", "reb", "oreb", "ast", "stl", "blk", "trn", "fls")
+
+        teamStats = {}
+
+        teamCmd = ""
+        oppCmd = ""
+        hAOpp = ""
+        try:
+            commCmd = "IN "+str(tuple(comOpps)) if len(comOpps) > 1 else "= "+str(comOpps[0])
+        except IndexError:
+            commCmd = "= -1"
+
+
+        if hA != "all":
+            hAOpp = "away" if hA == "home" else "home"
+
+        #### teamStats vs Common opps
+        if hA == "all":
+            teamCmd = "ts.team_id = "+str(teamId)
+            oppCmd = "ts.opp_id "+commCmd
+        else:
+            teamCmd = "ts.team_id = "+str(teamId)+" AND ts.team_id = gd.{}_id".format(hA)
+            oppCmd = "ts.opp_id "+commCmd + " AND ts.opp_id = gd.{}_id".format(hAOpp)
+
+        teamStats["team"] = dict(zip(statAbrvs, db.fetchOne(SQL.commStatsCmd.format({"gdCmd": gdCmd, "teamCmd": teamCmd, "oppCmd": oppCmd }))))
+
+        #### teamStats vs Every Other team
+        if hA == "all":
+            teamCmd = "ts.opp_id != "+str(teamId)
+            oppCmd = "ts.team_id "+commCmd
+        else:
+            teamCmd = "ts.opp_id != "+str(teamId)+" AND ts.opp_id = gd.{}_id".format(hA)
+            oppCmd = "ts.team_id "+commCmd + " AND ts.team_id = gd.{}_id".format(hAOpp)
+
+        teamStats["teamBase"] = dict(zip(statAbrvs, db.fetchOne(SQL.commStatsCmd.format({"gdCmd": gdCmd, "teamCmd": teamCmd, "oppCmd": oppCmd }))))
+
+        #### comOppStats vs team
+        if hA == "all":
+            teamCmd = "ts.team_id "+ commCmd
+            oppCmd = "ts.opp_id = "+str(teamId)
+        else:
+            teamCmd = "ts.team_id "+commCmd + " AND ts.team_id = gd.{}_id".format(hAOpp)
+            oppCmd = "ts.opp_id = "+str(teamId)+" AND ts.opp_id = gd.{}_id".format(hA)
+
+        teamStats["opp"] = dict(zip(statAbrvs, db.fetchOne(SQL.commStatsCmd.format({"gdCmd": gdCmd, "teamCmd": teamCmd, "oppCmd": oppCmd }))))
+
+
+        #### comOppStats vs Every Other team
+        if hA == "all":
+            teamCmd = "ts.opp_id "+commCmd
+            oppCmd = "ts.team_id != "+str(teamId)
+        else:
+            teamCmd = "ts.opp_id "+commCmd + " AND ts.opp_id = gd.{}_id".format(hAOpp)
+            oppCmd = "ts.team_id != "+str(teamId)+" AND ts.team_id = gd.{}_id".format(hA)
+
+        teamStats["oppBase"] = dict(zip(statAbrvs, db.fetchOne(SQL.commStatsCmd.format({"gdCmd": gdCmd, "teamCmd": teamCmd, "oppCmd": oppCmd }))))
+
+        return teamStats
+
+
+
+
     def getPlayerStats(self, playerId, label):
         return self.playerStats[playerId][label]
 
 
+    def getMatchups(self):
+        db = self.model.getDB()
+        return db.fetchAll(SQL.matchupResultCmd, (self.teams["home"].getId(),self.teams["away"].getId()))
+
+
+    def getLeagueStats(self, statType, stat):
+        return self.model.getStats(statType, stat)
+
+
     def getTeam(self, hA):
         return self.teams[hA]
+
+
+    def getTimeFrame(self):
+        return self.model.getTimeFrame()
 
 
     def getTeamPlayers(self, hA):

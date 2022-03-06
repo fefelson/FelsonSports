@@ -15,7 +15,7 @@ from ..Views.FelsonFrame import NFLFrame
 
 
 currentSeason = 2021
-currentWeek = 17
+currentWeek = 18
 leagueId = "nfl"
 
 
@@ -227,7 +227,7 @@ class NFLCtrl(Controller):
 
     def setTitle(self):
         super().setTitle()
-        print("\nnflctrl setTitle")
+        # print("\nnflctrl setTitle")
 
 
         recordCmd = """
@@ -249,7 +249,8 @@ class NFLCtrl(Controller):
             andGL = self.model.getAndGLCmd(hA)
             andWGL = self.model.getAndWGLCmd(hA)
 
-            # print(recordCmd.format({"gdCmd":gdCmd, "andWGL":andWGL, "andGL": andGL, "whereGL":whereGL}))
+            print(recordCmd.format({"gdCmd":gdCmd, "andWGL":andWGL, "andGL": andGL, "whereGL":whereGL}))
+            print(teamId)
             self.model.matchDB.openDB()
             record = self.model.matchDB.fetchOne(recordCmd.format({"gdCmd":gdCmd, "andWGL":andWGL, "andGL": andGL, "whereGL":whereGL}), (teamId,))
             self.model.matchDB.closeDB()

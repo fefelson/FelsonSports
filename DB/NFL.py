@@ -829,8 +829,6 @@ class NFLDB(DB):
                                         birthDay, draftYear, draftPick, draftTeam, college, rookYr))
 
 
-
-
     def seed(self):
         for values in stadiums:
             self.insert("stadiums", values=values)
@@ -845,8 +843,8 @@ class NFLDB(DB):
             self.insert("teams", info=team)
         self.insert("teams",colNames=("team_id",), values=(-1,))
 
-        self.insertPlayers()
-        self.insertBoxScores()
+        # self.insertPlayers()
+        # self.insertBoxScores()
 
 
     def unknownPlayers(self):

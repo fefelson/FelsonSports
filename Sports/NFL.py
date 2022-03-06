@@ -21,7 +21,7 @@ class NFL(League):
     _info = {
                 "leagueId": "nfl",
                 "slugId": "nfl",
-                "lastUpdate": "2021-11-25",
+                "lastUpdate": "2021-09-04",
                 "updateWeek": "11",
                 "currentSeason": currentSeason,
                 "startDate": "2021-09-05",

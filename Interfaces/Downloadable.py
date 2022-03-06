@@ -59,11 +59,8 @@ class Downloadable(metaclass=ABCMeta):
 
         try:
             print("New Download\n{}\n".format(self.url))
-            req = Request(self.url, headers=headers)
-            html = urlopen(req)
-            parser = BeautifulSoup(html, features="html.parser")
-            pprint(parser.text)
-            for line in parser.text.split("\n"):
+            html = urlopen(self.url)
+            for line in [x.decode("utf-8") for x in html.readlines()]:
                 if "root.App.main" in line:
                     item = json.loads(";".join(line.split("root.App.main = ")[1].split(";")[:-1]))
                     item = item["context"]["dispatcher"]["stores"]

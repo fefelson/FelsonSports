@@ -70,6 +70,21 @@ class NBAModel(Model):
 
     def newMatchDB(self, info):
         tables = ("game_lines", "over_unders", "games", "team_stats", "player_stats", "lineups", "player_shots")
+        tables1 = ("over_unders", )
+
+
+        t1Cmd = """
+                SELECT *
+                    FROM {} AS t1
+                """
+
+        glCmd = """
+                SELECT team_id, opp_id, gl.game_id, spread, line, money, result, spread_outcome, money_outcome
+                    FROM game_lines AS gl
+                    INNER JOIN games
+                    WHERE gl.game_id = games.game_id AND gl.team_id = games.home_id AND game_type = 'season'
+                """
+
 
         cmd = """
                 SELECT *
@@ -100,6 +115,9 @@ class NBAModel(Model):
                 """.format(currentSeason)
 
 
+
+
+
         self.matchDB.openDB()
         for team in ("away", "home"):
             teamId = info["{}Id".format(team)]
@@ -120,50 +138,53 @@ class NBAModel(Model):
                 except:
                     pass
 
+        for table in tables1:
+            for item in self.db.fetchAll(t1Cmd.format(table)):
+                try:
+                    self.matchDB.insert(table, values=item)
+                except IntegrityError:
+                    pass
+
+        for item in self.db.fetchAll(glCmd):
+            try:
+                self.matchDB.insert("history_lines", values=item)
+            except IntegrityError:
+                pass
+
+
+
         self.matchDB.commit()
         self.matchDB.closeDB()
 
 
     def getBackgroundColor(self, hA, label, key, value, reverse):
-        color = 2 #white
-        colors = ["red", "pink", "white", "pale green", "green", "gold"]
+        # print("hA "+hA, "label "+label, "key "+key)
+        color = "white"
+        colors = ["gold", "green", "pale green", "white", "pink", "red"]
         values = [x for x in range(1,7)]
         items = [x for x in range(1,6)]
         if reverse:
             values.reverse()
-            items.reverse()
         labelColors = dict(zip(values, colors))
         # print("\n\ntO "+self.options["tO"], "reverse "+str(reverse), "stat "+key, "value "+str(value))
         # pprint(labelColors)
         # print("\n")
         hA = self.options["hA"] if self.options["hA"] == "all" else hA
         levels = self.report[label][self.options["tF"]][hA][key]
-        print(key, value, reverse)
-        pprint(levels)
-        print("\n\n\n")
+
+        # pprint(levels)
         try:
-            if reverse:
-                for k in items:
-                    if value <= levels[str(k)]:
-                        color = k
-                    else:
-                        break
-                if value > levels["5"]:
-                    color = 6
-            else:
-                for k in items:
-                    print(value, levels[str(k)], value>=levels[str(k)])
-                    if value >= levels[str(k)]:
-                        color = k
-                    else:
-                        break
-                if value > levels["5"]:
-                    color = 6
+            for k in items:
+                # print(value, levels[str(k)], value >= levels[str(k)])
+                if value >= float(levels[str(k)]):
+                    color = labelColors[k]
+                    break
+            if value < levels["5"]:
+                color = labelColors[6]
         except TypeError:
             pass
-        print(color, "\n\n\n\n")
-        return Colour(labelColors[color])
-
+        # print(color, "\n\n\n\n")
+        return color
 
 ################################################################################
 ################################################################################
@@ -183,7 +204,7 @@ class NBACtrl(Controller):
 
     def setTitle(self):
         super().setTitle()
-        print("\nnbactrl setTitle")
+        # print("\nnbactrl setTitle")
 
         b2bCmd = """
                 SELECT game_id
@@ -237,7 +258,7 @@ class NBACtrl(Controller):
                     INNER JOIN players
                         ON ts.player_id = players.player_id
                     INNER JOIN lineups
-                        ON ts.game_id = lineups.game_id AND ts.player_id = lineups.player_id
+                        ON ts.game_id = lineups.game_id AND ts.player_id = lineups.player_id AND ts.team_id = lineups.team_id
                     INNER JOIN position_types AS pt
                         ON players.pos_id = pt.pos_id
                     WHERE ts.{0[team]}_id = ? {0[whereTS]}
@@ -258,7 +279,7 @@ class NBACtrl(Controller):
             self.model.matchDB.openDB()
             for i, player in enumerate([dict(zip(statList, player)) for player in self.model.matchDB.fetchAll(cmd.format({"gdCmd":gdCmd, "andTS":andTS, "andWL":andWL, "whereTS":whereTS, "team":self.model.options["tO"]}), (teamId,))]):
 
-                for key in ("name", "pos", "start%","fg%", "ft%", "tp%", "pts", "oreb",  "reb",
+                for key in ("name", "pos", "gp","start%","fg%", "ft%", "tp%", "pts", "oreb",  "reb",
                     "ast", "stl", "blk", "trn", "fls", "mins", "plmn"):
 
                     try:
@@ -280,7 +301,13 @@ class NBACtrl(Controller):
                     if self.model.options["tO"] == "team":
                         reverse = True if key in ("trn", "fls", ) else False
                     if key not in ("name", "mins", "gp", "start%", "pos"):
-                        self.frame.panels["Player Stats"].values[hA][i][key].SetBackgroundColour(self.model.getBackgroundColor(hA, "playerStats", key, player[key], reverse))
+                        color = self.model.getBackgroundColor(hA, "playerStats", key, player[key], reverse)
+                        textColor = "black"
+                        if color in ('green', 'red'):
+                            textColor = "white"
+
+                        self.frame.panels["Player Stats"].values[hA][i][key].SetBackgroundColour(color)
+                        self.frame.panels["Player Stats"].values[hA][i][key].SetForegroundColour(Colour(textColor))
             self.model.matchDB.closeDB()
         self.frame.panels["Player Stats"].Layout()
 
@@ -327,6 +354,11 @@ class NBACtrl(Controller):
                 else:
                     reverse = False if key in ("trn", "fls", ) else True
 
-                self.frame.panels["Team Stats"].values[hA][key].SetBackgroundColour(self.model.getBackgroundColor(hA, "teamStats", key, value, reverse))
+                color = self.model.getBackgroundColor(hA, "teamStats", key, value, reverse)
+                textColor = "black"
+                if color in ('green', 'red'):
+                    textColor = "white"
+                self.frame.panels["Team Stats"].values[hA][key].SetBackgroundColour(Colour(color))
+                self.frame.panels["Team Stats"].values[hA][key].SetForegroundColour(Colour(textColor))
 
         self.frame.panels["Team Stats"].Layout()

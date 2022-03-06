@@ -9,6 +9,9 @@ from .PlayerStatsPanel import BballPlayerStatsPanel, FballPlayerStatsPanel
 from .TeamStatsPanel import NCAAFTeamStatsPanel, NBATeamStatsPanel
 from .ThumbPanel import ListPanel
 from .TitlePanel import TitlePanel
+from .TotalsPanel import TotalsPanel
+from .TrackingPanel import NCAABTrackingPanel, NBATrackingPanel
+from .HistoryPanel import HistoryPanel
 from .. import Environ as ENV
 
 from pprint import pprint
@@ -107,7 +110,7 @@ class NBAFrame(FelsonFrame):
 
     _listPanel = ListPanel
     _nbPanels = (("Team Stats", NBATeamStatsPanel), ("Player Stats", BballPlayerStatsPanel), ("Gaming", GamingPanel), ("Game Log", GameLogPanel),
-                    ("GameLine", GameLinePanel), ("Injuries", InjuryPanel))
+                    ("GameLine", GameLinePanel), ("Totals", TotalsPanel),  ("Tracking", NBATrackingPanel), ("History", HistoryPanel), ("Injuries", InjuryPanel))
     _titlePanel = TitlePanel
     _tFChoices = ENV.tFBasketballChoices
 
@@ -119,7 +122,7 @@ class NCAABFrame(FelsonFrame):
 
     _listPanel = ListPanel
     _nbPanels = (("Team Stats", NBATeamStatsPanel), ("Player Stats", BballPlayerStatsPanel), ("Gaming", GamingPanel), ("Game Log", GameLogPanel),
-                    ("GameLine", GameLinePanel), ("Injuries", InjuryPanel))
+                    ("GameLine", GameLinePanel), ("Totals", TotalsPanel), ("Tracking", NCAABTrackingPanel), ("History", HistoryPanel), ("Injuries", InjuryPanel))
     _titlePanel = TitlePanel
     _tFChoices = ENV.tFBasketballChoices
 

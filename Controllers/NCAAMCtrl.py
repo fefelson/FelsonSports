@@ -58,6 +58,7 @@ injCmd = "SELECT first_name || ' ' || last_name || '   ' || abrv FROM players IN
 class NCAAMModel(Model):
 
     _basePath = "/home/ededub/FEFelson/{}/{}/{}/{}/".format(leagueId, currentSeason, *str(today.date()).split("-")[1:])
+    # _basePath = "/home/ededub/FEFelson/ncaab/2021/today/"
     _db = NCAABDB
     _matchDB = NCAABMatchDB
     _leagueId = leagueId
@@ -67,48 +68,24 @@ class NCAAMModel(Model):
         super().__init__()
 
 
-    def getBackgroundColor(self, hA, label, key, value, reverse):
-        # print("hA "+hA, "label "+label, "key "+key)
-        color = "WHITE"
-        colors = ["red", "pink", "white", "pale green", "green", "gold"]
-        values = [x for x in range(1,7)]
-        items = [x for x in range(1,6)]
-        if reverse:
-            values.reverse()
-            items.reverse()
-        labelColors = dict(zip(values, colors))
-        # print("\n\ntO "+self.options["tO"], "reverse "+str(reverse), "stat "+key, "value "+str(value))
-        # pprint(labelColors)
-        # print("\n")
-        hA = self.options["hA"] if self.options["hA"] == "all" else hA
-        levels = self.report[label][self.options["tF"]][hA][key]
-
-        # pprint(levels)
-        try:
-            if reverse:
-                for k in items:
-                    if value <= levels[str(k)]:
-                        color = labelColors[k]
-                    else:
-                        break
-                if value > levels["5"]:
-                    color = labelColors[6]
-            else:
-                for k in items:
-                    if value >= levels[str(k)]:
-                        color = labelColors[k]
-                    else:
-                        break
-                if value > levels["5"]:
-                    color = labelColors[6]
-        except TypeError:
-            pass
-        # print(color, "\n\n\n\n")
-        return Colour(color)
-
-
     def newMatchDB(self, info):
         tables = ("game_lines", "over_unders", "games", "team_stats", "player_stats", "lineups",)
+        tables1 = ("over_unders", )
+
+
+        t1Cmd = """
+                SELECT *
+                    FROM {} AS t1
+                """
+
+        glCmd = """
+                SELECT team_id, opp_id, gl.game_id, spread, line, money, result, spread_outcome, money_outcome
+                    FROM game_lines AS gl
+                    INNER JOIN games
+                    WHERE gl.game_id = games.game_id AND gl.team_id = games.home_id AND game_type = 'season'
+                """
+
+
 
         cmd = """
                 SELECT *
@@ -135,7 +112,7 @@ class NCAAMModel(Model):
         gCmd = """
                 SELECT game_id
                     FROM games
-                    WHERE season = {} AND (home_id = ? OR away_id = ?)
+                    WHERE season = {} AND (home_id = ? OR away_id = ?) AND (home_id != -1 OR away_id != -1)
                 """.format(currentSeason)
 
 
@@ -159,6 +136,18 @@ class NCAAMModel(Model):
                 except:
                     pass
 
+        for table in tables1:
+            for item in self.db.fetchAll(t1Cmd.format(table)):
+                try:
+                    self.matchDB.insert(table, values=item)
+                except IntegrityError:
+                    pass
+
+        for item in self.db.fetchAll(glCmd):
+            try:
+                self.matchDB.insert("history_lines", values=item)
+            except IntegrityError:
+                pass
 
         self.matchDB.commit()
         self.matchDB.closeDB()
@@ -182,7 +171,7 @@ class NCAAMCtrl(Controller):
 
     def setTitle(self):
         super().setTitle()
-        print("\n ncaabctrl setTitle")
+        # print("\nncaabctrl setTitle")
 
         b2bCmd = """
                 SELECT game_id
@@ -279,7 +268,14 @@ class NCAAMCtrl(Controller):
                     if self.model.options["tO"] == "team":
                         reverse = True if key in ("trn", "fls", ) else False
                     if key not in ("name", "mins", "gp", "start%", "pos"):
-                        self.frame.panels["Player Stats"].values[hA][i][key].SetBackgroundColour(self.model.getBackgroundColor(hA, "playerStats", key, player[key], reverse))
+                        color = self.model.getBackgroundColor(hA, "playerStats", key, player[key], reverse)
+                        textColor = "black"
+                        if color in ('green', 'red'):
+                            textColor = "white"
+
+                        self.frame.panels["Player Stats"].values[hA][i][key].SetBackgroundColour(color)
+                        self.frame.panels["Player Stats"].values[hA][i][key].SetForegroundColour(Colour(textColor))
+
             self.model.matchDB.closeDB()
         self.frame.panels["Player Stats"].Layout()
 
@@ -323,6 +319,11 @@ class NCAAMCtrl(Controller):
                     reverse = True if key in ("trn", "fls", ) else False
                 else:
                     reverse = False if key in ("trn", "fls", ) else True
+                color = self.model.getBackgroundColor(hA, "teamStats", key, value, reverse)
+                textColor = "black"
+                if color in ('green', 'red'):
+                    textColor = "white"
+                self.frame.panels["Team Stats"].values[hA][key].SetBackgroundColour(Colour(color))
+                self.frame.panels["Team Stats"].values[hA][key].SetForegroundColour(Colour(textColor))
 
-                self.frame.panels["Team Stats"].values[hA][key].SetBackgroundColour(self.model.getBackgroundColor(hA, "teamStats", key, value, reverse))
         self.frame.panels["Team Stats"].Layout()

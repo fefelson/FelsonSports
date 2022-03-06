@@ -30,4 +30,4 @@ tempDir = homePath + "{}/temp/"
 
 tFFootballChoices = ("2Months", "Season", "1Month", "2Weeks")
 tfBaseballChoices = ("1Month", "2Months", "Season", "2Weeks")
-tFBasketballChoices = ("1Month", "2Weeks", "Season", "2Months", "PrvSeason")
+tFBasketballChoices = ("1Month", "2Weeks", "Season", "2Months")

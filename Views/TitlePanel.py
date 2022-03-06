@@ -124,7 +124,7 @@ class TitlePanel(wx.Panel):
             halfSizer = wx.BoxSizer()
             leftSizer = wx.BoxSizer(wx.VERTICAL)
             leftSizer.Add(self.values[hA]["logo"], 0, wx.CENTER)
-            leftSizer.Add(wLTag, 0, wx.ALL, 10)
+            # leftSizer.Add(wLTag, 0, wx.ALL, 10)
 
             rightSizer = wx.BoxSizer(wx.VERTICAL)
             rightSizer.Add(self.values[hA]["name"], 0, wx.CENTER | wx.BOTTOM, 15)

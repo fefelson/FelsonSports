@@ -168,7 +168,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '',
   'team_id': '375'},
  {'abrv': 'SAM',
-  'conference': 'SOUTH',
+  'conference': 'Southern',
   'division': None,
   'first_name': 'Samford',
   'last_name': 'Bulldogs',
@@ -368,7 +368,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'c1c6c8',
   'team_id': '486'},
  {'abrv': 'CIT',
-  'conference': 'SOUTH',
+  'conference': 'Southern',
   'division': None,
   'first_name': 'Citadel',
   'last_name': 'Bulldogs',
@@ -1032,7 +1032,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'e5a823',
   'team_id': '500'},
  {'abrv': 'VMI',
-  'conference': 'SOUTH',
+  'conference': 'Southern',
   'division': None,
   'first_name': 'VMI',
   'last_name': 'Keydets',
@@ -1280,7 +1280,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '807f84',
   'team_id': '402'},
  {'abrv': 'WCU',
-  'conference': 'SOUTH',
+  'conference': 'Southern',
   'division': None,
   'first_name': 'Western Carolina',
   'last_name': 'Catamounts',
@@ -1826,7 +1826,7 @@ teams = [{'abrv': 'OAKL',
  {'abrv': 'N.E.',
   'conference': 'CAA',
   'division': None,
-  'first_name': 'Northeastern',
+  'first_name': 'NEACern',
   'last_name': 'Huskies',
   'primary_color': 'cc0001',
   'secondary_color': '000000',
@@ -1960,7 +1960,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '06315b',
   'team_id': '538'},
  {'abrv': 'WOF',
-  'conference': 'SOUTH',
+  'conference': 'Southern',
   'division': None,
   'first_name': 'Wofford',
   'last_name': 'Terriers',
@@ -1992,7 +1992,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '000000',
   'team_id': '1203'},
   {'abrv': 'CSUB',
-  'conference': 'Big West',
+  'conference': 'BIGW',
   'division': None,
   'first_name': 'Bakersfield',
   'last_name': 'Roadrunners',
@@ -2000,7 +2000,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'ffd200',
   'team_id': '1105'},
  {'abrv': 'APP',
-  'conference': 'Sun Belt',
+  'conference': 'SBELT',
   'division': None,
   'first_name': 'Appalachian State',
   'last_name': 'Mountaineers',
@@ -2008,7 +2008,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'ffcc00',
   'team_id': '16'},
  {'abrv': 'VERM',
-  'conference': 'America East',
+  'conference': 'AEAST',
   'division': None,
   'first_name': 'Vermont',
   'last_name': 'Catamounts',
@@ -2016,7 +2016,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '8b5b29',
   'team_id': '616'},
  {'abrv': 'SE LA',
-  'conference': 'Southland',
+  'conference': 'SLAND',
   'division': None,
   'first_name': 'Southeastern Louisiana',
   'last_name': 'Lions',
@@ -2024,7 +2024,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'f0b809',
   'team_id': '506'},
  {'abrv': 'WAG',
-  'conference': 'Northeast',
+  'conference': 'NEAC',
   'division': None,
   'first_name': 'Wagner',
   'last_name': 'Seahawks',
@@ -2032,7 +2032,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '',
   'team_id': '627'},
  {'abrv': 'SCST',
-  'conference': 'Mid-Eastern',
+  'conference': 'MEAC',
   'division': None,
   'first_name': 'South Carolina State',
   'last_name': 'Bulldogs',
@@ -2040,7 +2040,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '223155',
   'team_id': '517'},
  {'abrv': 'WIU',
-  'conference': 'Summit',
+  'conference': 'SUMM',
   'division': None,
   'first_name': 'Western Illinois',
   'last_name': 'Leathernecks',
@@ -2048,7 +2048,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'C3BD98',
   'team_id': '638'},
  {'abrv': 'SIU',
-  'conference': 'Missouri Valley',
+  'conference': 'MVC',
   'division': None,
   'first_name': 'Southern Illinois',
   'last_name': 'Salukis',
@@ -2056,7 +2056,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'ffffff',
   'team_id': '528'},
  {'abrv': 'WINTH',
-  'conference': 'Big South',
+  'conference': 'BSOU',
   'division': None,
   'first_name': 'Winthrop',
   'last_name': 'Eagles',
@@ -2064,7 +2064,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '',
   'team_id': '649'},
  {'abrv': 'UNI',
-  'conference': 'Missouri Valley',
+  'conference': 'MVC',
   'division': None,
   'first_name': 'UNI',
   'last_name': 'Panthers',
@@ -2072,7 +2072,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'ffcc00',
   'team_id': '418'},
  {'abrv': 'LSU',
-  'conference': 'Southeastern',
+  'conference': 'SEC',
   'division': None,
   'first_name': 'LSU',
   'last_name': 'Tigers',
@@ -2080,7 +2080,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'fdd023',
   'team_id': '319'},
  {'abrv': 'BLRMN',
-  'conference': 'Atlantic Sun',
+  'conference': 'ASUN',
   'division': None,
   'first_name': 'Bellarmine',
   'last_name': 'Knights',
@@ -2088,7 +2088,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '',
   'team_id': '1413'},
  {'abrv': 'UVU',
-  'conference': 'Western Athletic',
+  'conference': 'WAC',
   'division': None,
   'first_name': 'Utah Valley',
   'last_name': 'Wolverines',
@@ -2096,7 +2096,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '000000',
   'team_id': '1424'},
  {'abrv': 'ARIZ',
-  'conference': 'Pac-12',
+  'conference': 'PAC12',
   'division': None,
   'first_name': 'Arizona',
   'last_name': 'Wildcats',
@@ -2104,7 +2104,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '003366',
   'team_id': '17'},
  {'abrv': 'AUB',
-  'conference': 'Southeastern',
+  'conference': 'SEC',
   'division': None,
   'first_name': 'Auburn',
   'last_name': 'Tigers',
@@ -2112,7 +2112,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'e87722',
   'team_id': '28'},
  {'abrv': 'UCLA',
-  'conference': 'Pac-12',
+  'conference': 'PAC12',
   'division': None,
   'first_name': 'UCLA',
   'last_name': 'Bruins',
@@ -2120,7 +2120,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'ffcc00',
   'team_id': '606'},
  {'abrv': 'NOVA',
-  'conference': 'Big East',
+  'conference': 'BIGE',
   'division': None,
   'first_name': 'Villanova',
   'last_name': 'Wildcats',
@@ -2128,7 +2128,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '13b5ea',
   'team_id': '617'},
  {'abrv': 'SEA',
-  'conference': 'Western Athletic',
+  'conference': 'WAC',
   'division': None,
   'first_name': 'Seattle',
   'last_name': 'Redhawks',
@@ -2136,7 +2136,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '333333',
   'team_id': '507'},
  {'abrv': 'WAKE',
-  'conference': 'Atlantic Coast',
+  'conference': 'ACC',
   'division': None,
   'first_name': 'Wake Forest',
   'last_name': 'Demon Deacons',
@@ -2144,7 +2144,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '000000',
   'team_id': '628'},
  {'abrv': 'WKU',
-  'conference': 'Conference USA',
+  'conference': 'CUSA',
   'division': None,
   'first_name': 'Western Kentucky',
   'last_name': 'Hilltoppers',
@@ -2152,7 +2152,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '1e1e1e',
   'team_id': '639'},
  {'abrv': 'NIAG',
-  'conference': 'Metro Atlantic Athletic',
+  'conference': 'MAAC',
   'division': None,
   'first_name': 'Niagara',
   'last_name': 'Purple Eagles',
@@ -2160,7 +2160,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '',
   'team_id': '408'},
  {'abrv': 'CSUN',
-  'conference': 'Big West',
+  'conference': 'BIGW',
   'division': None,
   'first_name': 'CSUN',
   'last_name': 'Matadors',
@@ -2168,7 +2168,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'd1cec6',
   'team_id': '419'},
  {'abrv': 'LIU',
-  'conference': 'Northeast',
+  'conference': 'NEAC',
   'division': None,
   'first_name': 'LIU',
   'last_name': 'Sharks',
@@ -2176,7 +2176,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '',
   'team_id': '309'},
  {'abrv': 'N OMA',
-  'conference': 'Summit',
+  'conference': 'SUMM',
   'division': None,
   'first_name': 'Omaha',
   'last_name': 'Mavericks',
@@ -2184,7 +2184,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'd71920',
   'team_id': '1337'},
  {'abrv': 'SDAK',
-  'conference': 'Summit',
+  'conference': 'SUMM',
   'division': None,
   'first_name': 'South Dakota',
   'last_name': 'Coyotes',
@@ -2192,7 +2192,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'b4b4b4',
   'team_id': '1458'},
  {'abrv': 'SHU',
-  'conference': 'Northeast',
+  'conference': 'NEAC',
   'division': None,
   'first_name': 'Sacred Heart',
   'last_name': 'Pioneers',
@@ -2200,7 +2200,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '',
   'team_id': '1118'},
  {'abrv': 'ASU',
-  'conference': 'Pac-12',
+  'conference': 'PAC12',
   'division': None,
   'first_name': 'Arizona State',
   'last_name': 'Sun Devils',
@@ -2208,7 +2208,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'ffc627',
   'team_id': '18'},
  {'abrv': 'UVA',
-  'conference': 'Atlantic Coast',
+  'conference': 'ACC',
   'division': None,
   'first_name': 'Virginia',
   'last_name': 'Cavaliers',
@@ -2216,7 +2216,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'ffffff',
   'team_id': '618'},
  {'abrv': 'SHU',
-  'conference': 'Big East',
+  'conference': 'BIGE',
   'division': None,
   'first_name': 'Seton Hall',
   'last_name': 'Pirates',
@@ -2224,7 +2224,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'a2aaad',
   'team_id': '508'},
  {'abrv': 'NICH',
-  'conference': 'Southland',
+  'conference': 'SLAND',
   'division': None,
   'first_name': 'Nicholls',
   'last_name': 'Colonels',
@@ -2232,7 +2232,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'C7C7C5',
   'team_id': '409'},
  {'abrv': 'CABAP',
-  'conference': 'Western Athletic',
+  'conference': 'WAC',
   'division': None,
   'first_name': 'California Baptist',
   'last_name': 'Lancers',
@@ -2240,7 +2240,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '',
   'team_id': '1009'},
  {'abrv': 'ARK',
-  'conference': 'Southeastern',
+  'conference': 'SEC',
   'division': None,
   'first_name': 'Arkansas',
   'last_name': 'Razorbacks',
@@ -2248,7 +2248,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '828a8f',
   'team_id': '19'},
  {'abrv': 'SEMO',
-  'conference': 'Ohio Valley',
+  'conference': 'OVC',
   'division': None,
   'first_name': 'Southeast Missouri State',
   'last_name': 'Redhawks',
@@ -2256,7 +2256,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '000000',
   'team_id': '509'},
  {'abrv': 'USC',
-  'conference': 'Pac-12',
+  'conference': 'PAC12',
   'division': None,
   'first_name': 'USC',
   'last_name': 'Trojans',
@@ -2264,7 +2264,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'ffcc00',
   'team_id': '609'},
  {'abrv': 'LONGW',
-  'conference': 'Big South',
+  'conference': 'BSOU',
   'division': None,
   'first_name': 'Longwood',
   'last_name': 'Lancers',
@@ -2272,7 +2272,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '',
   'team_id': '1219'},
  {'abrv': 'NCCU',
-  'conference': 'Mid-Eastern',
+  'conference': 'MEAC',
   'division': None,
   'first_name': 'North Carolina Central',
   'last_name': 'Eagles',
@@ -2280,7 +2280,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '8e9093',
   'team_id': '907'},
  {'abrv': 'N KY',
-  'conference': 'Horizon',
+  'conference': 'HORIZ',
   'division': None,
   'first_name': 'Northern Kentucky',
   'last_name': 'Norse',
@@ -2288,7 +2288,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'ffffff',
   'team_id': '1506'},
  {'abrv': 'IW',
-  'conference': 'Southland',
+  'conference': 'SLAND',
   'division': None,
   'first_name': 'UIW',
   'last_name': 'Cardinals',
@@ -2296,7 +2296,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '',
   'team_id': '1528'},
  {'abrv': 'MERR',
-  'conference': 'Northeast',
+  'conference': 'NEAC',
   'division': None,
   'first_name': 'Merrimack',
   'last_name': 'Warriors',
@@ -2304,7 +2304,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '',
   'team_id': '1519'},
  {'abrv': 'EKY',
-  'conference': 'Ohio Valley',
+  'conference': 'OVC',
   'division': None,
   'first_name': 'Eastern Kentucky',
   'last_name': 'Colonels',
@@ -2312,7 +2312,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'ffffff',
   'team_id': '180'},
  {'abrv': 'JKST',
-  'conference': 'Southwestern Athletic',
+  'conference': 'SWAC',
   'division': None,
   'first_name': 'Jackson State',
   'last_name': 'Tigers',
@@ -2320,7 +2320,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'ffffff',
   'team_id': '280'},
  {'abrv': 'DRKE',
-  'conference': 'Missouri Valley',
+  'conference': 'MVC',
   'division': None,
   'first_name': 'Drake',
   'last_name': 'Bulldogs',
@@ -2328,7 +2328,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '',
   'team_id': '170'},
  {'abrv': 'KENT',
-  'conference': 'Mid-American',
+  'conference': 'MAC',
   'division': None,
   'first_name': 'Kent State',
   'last_name': 'Golden Flashes',
@@ -2336,7 +2336,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'eaab00',
   'team_id': '291'},
  {'abrv': 'EMU',
-  'conference': 'Mid-American',
+  'conference': 'MAC',
   'division': None,
   'first_name': 'Eastern Michigan',
   'last_name': 'Eagles',
@@ -2344,7 +2344,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '000000',
   'team_id': '181'},
  {'abrv': 'DSU',
-  'conference': 'Mid-Eastern',
+  'conference': 'MEAC',
   'division': None,
   'first_name': 'Delaware State',
   'last_name': 'Hornets',
@@ -2352,7 +2352,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '000000',
   'team_id': '160'},
  {'abrv': 'JXVL',
-  'conference': 'Atlantic Sun',
+  'conference': 'ASUN',
   'division': None,
   'first_name': 'Jacksonville',
   'last_name': 'Dolphins',
@@ -2360,7 +2360,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '898a8d',
   'team_id': '281'},
  {'abrv': 'UK',
-  'conference': 'Southeastern',
+  'conference': 'SEC',
   'division': None,
   'first_name': 'Kentucky',
   'last_name': 'Wildcats',
@@ -2368,7 +2368,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'ffffff',
   'team_id': '292'},
  {'abrv': 'EVAN',
-  'conference': 'Missouri Valley',
+  'conference': 'MVC',
   'division': None,
   'first_name': 'Evansville',
   'last_name': 'Aces',
@@ -2376,7 +2376,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '',
   'team_id': '193'},
  {'abrv': 'IUPUI',
-  'conference': 'Horizon',
+  'conference': 'HORIZ',
   'division': None,
   'first_name': 'IUPUI',
   'last_name': 'Jaguars',
@@ -2384,7 +2384,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'dfd1a7',
   'team_id': '1090'},
  {'abrv': 'MONM',
-  'conference': 'Metro Atlantic Athletic',
+  'conference': 'MAAC',
   'division': None,
   'first_name': 'Monmouth',
   'last_name': 'Hawks',
@@ -2392,7 +2392,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '53565a',
   'team_id': '370'},
  {'abrv': 'MURR',
-  'conference': 'Ohio Valley',
+  'conference': 'OVC',
   'division': None,
   'first_name': 'Murray State',
   'last_name': 'Racers',
@@ -2400,7 +2400,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'f7c025',
   'team_id': '381'},
  {'abrv': 'IND',
-  'conference': 'Big Ten',
+  'conference': 'BTEN',
   'division': None,
   'first_name': 'Indiana',
   'last_name': 'Hoosiers',
@@ -2408,7 +2408,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'eeedeb',
   'team_id': '271'},
  {'abrv': 'NAVY',
-  'conference': 'Patriot League',
+  'conference': 'PAT',
   'division': None,
   'first_name': 'Navy',
   'last_name': 'Midshipmen',
@@ -2432,7 +2432,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '',
   'team_id': '172'},
  {'abrv': 'TENN',
-  'conference': 'Southeastern',
+  'conference': 'SEC',
   'division': None,
   'first_name': 'Tennessee',
   'last_name': 'Volunteers',
@@ -2440,7 +2440,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '58595b',
   'team_id': '580'},
  {'abrv': 'PRE',
-  'conference': 'Big South',
+  'conference': 'BSOU',
   'division': None,
   'first_name': 'Presbyterian',
   'last_name': 'Blue Hose',
@@ -2448,7 +2448,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '',
   'team_id': '470'},
  {'abrv': 'TXSO',
-  'conference': 'Southwestern Athletic',
+  'conference': 'SWAC',
   'division': None,
   'first_name': 'Texas Southern',
   'last_name': 'Tigers',
@@ -2456,7 +2456,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'ffffff',
   'team_id': '591'},
  {'abrv': 'RUTG',
-  'conference': 'Big Ten',
+  'conference': 'BTEN',
   'division': None,
   'first_name': 'Rutgers',
   'last_name': 'Scarlet Knights',
@@ -2464,7 +2464,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '5f6a72',
   'team_id': '492'},
  {'abrv': 'UNCA',
-  'conference': 'Big South',
+  'conference': 'BSOU',
   'division': None,
   'first_name': 'UNC Asheville',
   'last_name': 'Bulldogs',
@@ -2472,7 +2472,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '',
   'team_id': '393'},
  {'abrv': 'DUKE',
-  'conference': 'Atlantic Coast',
+  'conference': 'ACC',
   'division': None,
   'first_name': 'Duke',
   'last_name': 'Blue Devils',
@@ -2480,7 +2480,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'ffffff',
   'team_id': '173'},
  {'abrv': 'EWU',
-  'conference': 'Big Sky',
+  'conference': 'BSKY',
   'division': None,
   'first_name': 'Eastern Washington',
   'last_name': 'Eagles',
@@ -2496,7 +2496,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'a39568',
   'team_id': '195'},
  {'abrv': 'PENN',
-  'conference': 'Ivy League',
+  'conference': 'IVY',
   'division': None,
   'first_name': 'Penn',
   'last_name': 'Quakers',
@@ -2520,7 +2520,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '000000',
   'team_id': '350'},
  {'abrv': 'PRIN',
-  'conference': 'Ivy League',
+  'conference': 'IVY',
   'division': None,
   'first_name': 'Princeton',
   'last_name': 'Tigers',
@@ -2528,7 +2528,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '000000',
   'team_id': '471'},
  {'abrv': 'TTU',
-  'conference': 'Big 12',
+  'conference': 'BIG12',
   'division': None,
   'first_name': 'Texas Tech',
   'last_name': 'Red Raiders',
@@ -2536,7 +2536,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '000000',
   'team_id': '592'},
  {'abrv': 'COPP',
-  'conference': 'Mid-Eastern',
+  'conference': 'MEAC',
   'division': None,
   'first_name': 'Coppin State',
   'last_name': 'Eagles',
@@ -2544,7 +2544,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '',
   'team_id': '130'},
  {'abrv': 'MONT',
-  'conference': 'Big Sky',
+  'conference': 'BSKY',
   'division': None,
   'first_name': 'Montana',
   'last_name': 'Grizzlies',
@@ -2552,7 +2552,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '999999',
   'team_id': '372'},
  {'abrv': 'DENV',
-  'conference': 'Summit',
+  'conference': 'SUMM',
   'division': None,
   'first_name': 'Denver',
   'last_name': 'Pioneers',
@@ -2560,7 +2560,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '8b6f4b',
   'team_id': '163'},
  {'abrv': 'JVST',
-  'conference': 'Ohio Valley',
+  'conference': 'OVC',
   'division': None,
   'first_name': 'Jacksonville State',
   'last_name': 'Gamecocks',
@@ -2568,7 +2568,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '000000',
   'team_id': '284'},
  {'abrv': 'DUQ',
-  'conference': 'Atlantic 10',
+  'conference': 'A10',
   'division': None,
   'first_name': 'Duquesne',
   'last_name': 'Dukes',
@@ -2576,7 +2576,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'ba0c2f',
   'team_id': '174'},
  {'abrv': 'ORST',
-  'conference': 'Pac-12',
+  'conference': 'PAC12',
   'division': None,
   'first_name': 'Oregon State',
   'last_name': 'Beavers',
@@ -2584,7 +2584,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'ff8c1f',
   'team_id': '450'},
  {'abrv': 'PEPP',
-  'conference': 'West Coast',
+  'conference': 'WCC',
   'division': None,
   'first_name': 'Pepperdine',
   'last_name': 'Waves',
@@ -2592,7 +2592,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'ee7624',
   'team_id': '461'},
  {'abrv': 'TNST',
-  'conference': 'Ohio Valley',
+  'conference': 'OVC',
   'division': None,
   'first_name': 'Tennessee State',
   'last_name': 'Tigers',
@@ -2600,7 +2600,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '',
   'team_id': '582'},
  {'abrv': 'UGA',
-  'conference': 'Southeastern',
+  'conference': 'SEC',
   'division': None,
   'first_name': 'Georgia',
   'last_name': 'Bulldogs',
@@ -2608,7 +2608,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '000000',
   'team_id': '230'},
  {'abrv': 'PROV',
-  'conference': 'Big East',
+  'conference': 'BIGE',
   'division': None,
   'first_name': 'Providence',
   'last_name': 'Friars',
@@ -2616,7 +2616,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '000000',
   'team_id': '472'},
  {'abrv': 'CLEM',
-  'conference': 'Atlantic Coast',
+  'conference': 'ACC',
   'division': None,
   'first_name': 'Clemson',
   'last_name': 'Tigers',
@@ -2624,7 +2624,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '522d80',
   'team_id': '120'},
  {'abrv': 'SOU',
-  'conference': 'Southwestern Athletic',
+  'conference': 'SWAC',
   'division': None,
   'first_name': 'Southern University',
   'last_name': 'Jaguars',
@@ -2632,7 +2632,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'FFC726',
   'team_id': '241'},
  {'abrv': 'RAD',
-  'conference': 'Big South',
+  'conference': 'BSOU',
   'division': None,
   'first_name': 'Radford',
   'last_name': 'Highlanders',
@@ -2640,7 +2640,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '',
   'team_id': '483'},
  {'abrv': 'COR',
-  'conference': 'Ivy League',
+  'conference': 'IVY',
   'division': None,
   'first_name': 'Cornell',
   'last_name': 'Big Red',
@@ -2656,7 +2656,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '',
   'team_id': '252'},
  {'abrv': 'MTST',
-  'conference': 'Big Sky',
+  'conference': 'BSKY',
   'division': None,
   'first_name': 'Montana State',
   'last_name': 'Bobcats',
@@ -2664,7 +2664,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'b9975b',
   'team_id': '373'},
  {'abrv': 'SAC',
-  'conference': 'Big Sky',
+  'conference': 'BSKY',
   'division': None,
   'first_name': 'Sacramento State',
   'last_name': 'Hornets',
@@ -2672,7 +2672,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'c4b581',
   'team_id': '494'},
  {'abrv': 'IDHO',
-  'conference': 'Big Sky',
+  'conference': 'BSKY',
   'division': None,
   'first_name': 'Idaho',
   'last_name': 'Vandals',
@@ -2680,7 +2680,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'eaab00',
   'team_id': '263'},
  {'abrv': 'INST',
-  'conference': 'Missouri Valley',
+  'conference': 'MVC',
   'division': None,
   'first_name': 'Indiana State',
   'last_name': 'Sycamores',
@@ -2688,7 +2688,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'FFFFFF',
   'team_id': '274'},
  {'abrv': 'CHAR',
-  'conference': 'Conference USA',
+  'conference': 'CUSA',
   'division': None,
   'first_name': 'Charlotte',
   'last_name': '49ers',
@@ -2696,7 +2696,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'b9975b',
   'team_id': '395'},
  {'abrv': 'DEPL',
-  'conference': 'Big East',
+  'conference': 'BIGE',
   'division': None,
   'first_name': 'DePaul',
   'last_name': 'Blue Demons',
@@ -2704,7 +2704,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'e4002b',
   'team_id': '164'},
  {'abrv': 'LIPS',
-  'conference': 'Atlantic Sun',
+  'conference': 'ASUN',
   'division': None,
   'first_name': 'Lipscomb',
   'last_name': 'Bisons',
@@ -2712,7 +2712,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'f4aa00',
   'team_id': '1281'},
  {'abrv': 'BUFF',
-  'conference': 'Mid-American',
+  'conference': 'MAC',
   'division': None,
   'first_name': 'Buffalo',
   'last_name': 'Bulls',
@@ -2720,7 +2720,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'ffffff',
   'team_id': '71'},
  {'abrv': 'WRIGHT',
-  'conference': 'Horizon',
+  'conference': 'HORIZ',
   'division': None,
   'first_name': 'Wright State',
   'last_name': 'Raiders',
@@ -2728,7 +2728,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'cea052',
   'team_id': '660'},
  {'abrv': 'ULL',
-  'conference': 'Sun Belt',
+  'conference': 'SBELT',
   'division': None,
   'first_name': 'Louisiana',
   'last_name': "Ragin' Cajuns",
@@ -2736,7 +2736,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '0a0203',
   'team_id': '550'},
  {'abrv': 'XAV',
-  'conference': 'Big East',
+  'conference': 'BIGE',
   'division': None,
   'first_name': 'Xavier',
   'last_name': 'Musketeers',
@@ -2752,7 +2752,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '582c83',
   'team_id': '220'},
  {'abrv': 'MRSH',
-  'conference': 'Conference USA',
+  'conference': 'CUSA',
   'division': None,
   'first_name': 'Marshall',
   'last_name': 'Thundering Herd',
@@ -2760,7 +2760,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'a2aaad',
   'team_id': '341'},
  {'abrv': 'TNTC',
-  'conference': 'Ohio Valley',
+  'conference': 'OVC',
   'division': None,
   'first_name': 'Tennessee Tech',
   'last_name': 'Golden Eagles',
@@ -2768,7 +2768,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'fec401',
   'team_id': '583'},
  {'abrv': 'GA ST',
-  'conference': 'Sun Belt',
+  'conference': 'SBELT',
   'division': None,
   'first_name': 'Georgia State',
   'last_name': 'Panthers',
@@ -2776,7 +2776,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'c60c30',
   'team_id': '231'},
  {'abrv': 'TOL',
-  'conference': 'Mid-American',
+  'conference': 'MAC',
   'division': None,
   'first_name': 'Toledo',
   'last_name': 'Rockets',
@@ -2784,7 +2784,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'ffda00',
   'team_id': '594'},
  {'abrv': 'CLST',
-  'conference': 'Horizon',
+  'conference': 'HORIZ',
   'division': None,
   'first_name': 'Cleveland State',
   'last_name': 'Vikings',
@@ -2792,7 +2792,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '000000',
   'team_id': '121'},
  {'abrv': 'MINN',
-  'conference': 'Big Ten',
+  'conference': 'BTEN',
   'division': None,
   'first_name': 'Minnesota',
   'last_name': 'Golden Gophers',
@@ -2800,7 +2800,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'ffcc33',
   'team_id': '363'},
  {'abrv': 'HC',
-  'conference': 'Patriot League',
+  'conference': 'PAT',
   'division': None,
   'first_name': 'Holy Cross',
   'last_name': 'Crusaders',
@@ -2808,7 +2808,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'ffffff',
   'team_id': '253'},
  {'abrv': 'SHSU',
-  'conference': 'Southland',
+  'conference': 'SLAND',
   'division': None,
   'first_name': 'Sam Houston State',
   'last_name': 'Bearkats',
@@ -2816,7 +2816,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '010F8A',
   'team_id': '495'},
  {'abrv': 'IONA',
-  'conference': 'Metro Atlantic Athletic',
+  'conference': 'MAAC',
   'division': None,
   'first_name': 'Iona',
   'last_name': 'Gaels',
@@ -2832,7 +2832,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'ffb71b',
   'team_id': '396'},
  {'abrv': 'DET',
-  'conference': 'Horizon',
+  'conference': 'HORIZ',
   'division': None,
   'first_name': 'Detroit',
   'last_name': 'Titans',
@@ -2848,7 +2848,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'ffc72c',
   'team_id': '176'},
  {'abrv': 'BAY',
-  'conference': 'Big 12',
+  'conference': 'BIG12',
   'division': None,
   'first_name': 'Baylor',
   'last_name': 'Bears',
@@ -2856,7 +2856,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'fecb00',
   'team_id': '50'},
  {'abrv': 'BGSU',
-  'conference': 'Mid-American',
+  'conference': 'MAC',
   'division': None,
   'first_name': 'Bowling Green',
   'last_name': 'Falcons',
@@ -2864,7 +2864,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '4f2c1d',
   'team_id': '61'},
  {'abrv': 'CP',
-  'conference': 'Big West',
+  'conference': 'BIGW',
   'division': None,
   'first_name': 'Cal Poly',
   'last_name': 'Mustangs',
@@ -2872,7 +2872,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'ffe395',
   'team_id': '94'},
  {'abrv': 'WYO',
-  'conference': 'Mountain West',
+  'conference': 'MWC',
   'division': None,
   'first_name': 'Wyoming',
   'last_name': 'Cowboys',
@@ -2880,7 +2880,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '492f24',
   'team_id': '661'},
  {'abrv': 'MOST',
-  'conference': 'Missouri Valley',
+  'conference': 'MVC',
   'division': None,
   'first_name': 'Missouri State',
   'last_name': 'Bears',
@@ -2888,7 +2888,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': 'ffffff',
   'team_id': '551'},
  {'abrv': 'TARL',
-  'conference': 'Western Athletic',
+  'conference': 'WAC',
   'division': None,
   'first_name': 'Tarleton State',
   'last_name': 'Texans',
@@ -2896,7 +2896,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '',
   'team_id': '1056'},
  {'abrv': 'DXST',
-  'conference': 'Western Athletic',
+  'conference': 'WAC',
   'division': None,
   'first_name': 'Dixie State',
   'last_name': 'Trailblazers',
@@ -2904,7 +2904,7 @@ teams = [{'abrv': 'OAKL',
   'secondary_color': '',
   'team_id': '1750'},
  {'abrv': 'USD',
-  'conference': 'Big West',
+  'conference': 'BIGW',
   'division': None,
   'first_name': 'UC San Diego',
   'last_name': 'Tritons',
@@ -3280,11 +3280,237 @@ class NCAABDB(DB):
             pass
 
 
+    # def insertGame(self, gameData):
+    #
+    #      #### Add game info
+    #     gameId = yId(gameData["gameId"])
+    #     homeId = yId(gameData["homeId"])
+    #     awayId = yId(gameData["awayId"])
+    #
+    #     homePoints = int(gameData["homePoints"])
+    #     awayPoints = int(gameData["awayPoints"])
+    #
+    #     if homePoints > awayPoints:
+    #         winnerId = homeId
+    #         loserId = awayId
+    #     else:
+    #         winnerId = awayId
+    #         loserId = homeId
+    #
+    #     season = gameData["season"]
+    #     gd = datetime.datetime.strptime(gameData["gameTime"], "%a, %d %b %Y %H:%M:%S %z") - datetime.timedelta(hours=5)
+    #     gameDate = "{1}.{2}".format(*str(gd.date()).split("-"))
+    #
+    #     gameYear = gd.year
+    #     gameType = yId(gameData["seasonPhase"])
+    #     gameTime = gameData["gameTime"]
+    #     self.insert("games", values=[gameId, homeId, awayId, winnerId, loserId,
+    #                                         gameType, season, gameYear, gameDate, gameTime, "won"])
+    #
+    #
+    #     #### Add team stats
+    #     try:
+    #         statsData = gameData["statsData"]["teamStatsByGameId"]["ncaab.g.{}".format(gameId)]
+    #         for teamId in (homeId, awayId):
+    #             oppId = homeId if teamId == awayId else awayId
+    #             teamStats = statsData["ncaab.t.{}".format(teamId)]["ncaab.stat_variation.2"]
+    #
+    #             fgm, fga = teamStats.pop("ncaab.stat_type.128").split("-")
+    #             ftm, fta = teamStats.pop("ncaab.stat_type.129").split("-")
+    #             tpm, tpa = teamStats.pop("ncaab.stat_type.130").split("-")
+    #             pts = teamStats["ncaab.stat_type.113"]
+    #             oreb = teamStats["ncaab.stat_type.114"]
+    #             dreb = teamStats["ncaab.stat_type.115"]
+    #             reb = teamStats["ncaab.stat_type.116"]
+    #             ast = teamStats["ncaab.stat_type.117"]
+    #             stl = teamStats["ncaab.stat_type.118"]
+    #             blk = teamStats["ncaab.stat_type.119"]
+    #             trn = teamStats["ncaab.stat_type.120"]
+    #             fls = teamStats["ncaab.stat_type.122"]
+    #             self.insert("team_stats", values=[teamId, gameId, oppId, fga, fgm, fta, ftm,
+    #                                                     tpa, tpm, pts, oreb, dreb, reb, ast, stl, blk, trn, fls])
+    #     except KeyError:
+    #         pass
+    #
+    #     for teamId, pts in ((homeId, homePoints), (awayId, awayPoints)):
+    #         oppId = homeId if teamId == awayId else awayId
+    #
+    #         yesterday = gd - datetime.timedelta(1)
+    #
+    #         self.insert("team_stats", values=[teamId, gameId, oppId, -1, -1, -1, -1,
+    #                                             -1, -1, pts, -1, -1, -1, -1, -1, -1, -1, -1])
+    #
+    #
+    #     # #### Set rosters
+    #     # roster = {}
+    #     # try:
+    #     #     playerTeam = gameData["playersByTeam"]
+    #     #     for key in playerTeam.keys():
+    #     #         teamId = yId(key)
+    #     #         for player in playerTeam[key]:
+    #     #             roster[yId(player)] = teamId
+    #     # except KeyError:
+    #     #     pass
+    #     #
+    #     #
+    #     # ### Add lineup stats
+    #     #
+    #     # try:
+    #     #     pgData = gameData["lineups"]
+    #     #     for lineup in ("away_lineup", "home_lineup"):
+    #     #         for key, value in pgData[lineup]["all"].items():
+    #     #             playerId = yId(key)
+    #     #             teamId = roster.get(playerId, -1)
+    #     #             oppId = homeId if teamId == awayId else awayId
+    #     #             if teamId == -1:
+    #     #                 oppId = -1
+    #     #             starter = value["starter"]
+    #     #             order = value["order"]
+    #     #             self.insert("lineups", values=[None, gameId, playerId, teamId, oppId, order, starter])
+    #     #
+    #     # except (KeyError, TypeError):
+    #     #     pass
+    #     #
+    #     # #### Add player stats
+    #     #
+    #     # statsData = gameInfo["statsData"]["playerStats"]
+    #     # for key, value in statsData.items():
+    #     #     playerId = yId(key)
+    #     #     teamId = roster.get(playerId, -1)
+    #     #     oppId = homeId if teamId == awayId else awayId
+    #     #     if teamId == -1:
+    #     #         oppId = -1
+    #     #     try:
+    #     #         playerStats = value["ncaab.stat_variation.2"]
+    #     #         fgm, fga = playerStats.pop("ncaab.stat_type.28").split("-")
+    #     #         ftm, fta = playerStats.pop("ncaab.stat_type.29").split("-")
+    #     #         tpm, tpa = playerStats.pop("ncaab.stat_type.30").split("-")
+    #     #         pts = playerStats["ncaab.stat_type.13"]
+    #     #         oreb = playerStats["ncaab.stat_type.14"]
+    #     #         dreb = playerStats["ncaab.stat_type.15"]
+    #     #         reb = playerStats["ncaab.stat_type.16"]
+    #     #         ast = playerStats["ncaab.stat_type.17"]
+    #     #         stl = playerStats["ncaab.stat_type.18"]
+    #     #         blk = playerStats["ncaab.stat_type.19"]
+    #     #         trn = playerStats["ncaab.stat_type.20"]
+    #     #         fls = playerStats["ncaab.stat_type.22"]
+    #     #         mins = playerStats["ncaab.stat_type.3"]
+    #     #
+    #     #         self.insert("player_stats", values=[playerId, gameId, teamId, oppId, fga, fgm, fta, ftm,
+    #     #                                             tpa, tpm, pts, oreb, dreb, reb, ast, stl, blk, trn, fls,
+    #     #                                             mins])
+    #     #     except KeyError:
+    #     #         pass
+    #
+    #     #### Add Odds
+    #     key = None
+    #     teams = []
+    #     odds = gameData["odds"][0]
+    #     if odds["101"]["total"] != 0:
+    #         key = "101"
+    #     else:
+    #         key = "99"
+    #     for hA in ("away", "home"):
+    #         teamId = yId(gameData["{}Id".format(hA)])
+    #         oppId = homeId if teamId == awayId else awayId
+    #         teamScore = int(gameData["{}Points".format(hA)])
+    #         try:
+    #             teamSpread = float(odds[key]["{}_spread".format(hA)])
+    #         except:
+    #             teamSpread = 0
+    #
+    #         teamMoney = odds[key]["{}_ml".format(hA)]
+    #         try:
+    #             teamVig = float(odds[key]["{}_line".format(hA)])
+    #         except ValueError:
+    #             teamVig = 0
+    #
+    #         teams.append(dict(zip(("Id", "Score", "Spread", "Money", "Vig"), (teamId, teamScore, teamSpread, teamMoney, teamVig))))
+    #
+    #     #### overUndersTable
+    #
+    #     try:
+    #         ou = float(odds[key]["total"])
+    #     except:
+    #         ou = 0
+    #
+    #     try:
+    #         overLine = int(odds[key]["over_line"])
+    #     except:
+    #         overLine = 0
+    #
+    #     try:
+    #         underLine = int(odds[key]["under_line"])
+    #     except:
+    #         underLine = 0
+    #
+    #     total = teams[0]["Score"] + teams[1]["Score"]
+    #     outcome = 0
+    #     if total - ou > 0:
+    #         outcome = 1
+    #     elif total - ou < 0:
+    #         outcome = -1
+    #     self.insert("over_unders", values=[gameId, ou, overLine, underLine, total, outcome])
+    #
+    #
+    #     #### gameLInesTable
+    #
+    #     for i in range(2):
+    #         team, opp = teams[-1*i], teams[1+(-1*i)]
+    #
+    #         teamId = team["Id"]
+    #         oppId = opp["Id"]
+    #         spread = team["Spread"]
+    #         line = team["Vig"]
+    #         money = team["Money"]
+    #         result = team["Score"] - opp["Score"]
+    #         spreadOutcome = 0
+    #         if result + spread > 0:
+    #             spreadOutcome = 1
+    #         elif result + spread < 0:
+    #             spreadOutcome = -1
+    #         moneyOutcome = 0
+    #         if result > 0:
+    #             moneyOutcome = 1
+    #         elif result < 0:
+    #             moneyOutcome = -1
+    #
+    #
+    #
+    #         self.insert("game_lines", values=(teamId, oppId, gameId,
+    #                                                   spread, line, money, result,
+    #                                                       spreadOutcome, moneyOutcome))
+    #
+    #
+    #
+    #
+    #     # try:
+    #     #     #### playersTable
+    #     #
+    #     #     for player in gameInfo["playerData"]["players"].values():
+    #     #         playerId = yId(player["player_id"])
+    #     #         newPlayer = {}
+    #     #         newPlayer["first_name"] = player["first_name"]
+    #     #         newPlayer["last_name"] = player["last_name"]
+    #     #         newPlayer["number"] = player["uniform_number"]
+    #     #         newPlayer["player_id"] = playerId
+    #     #         newPlayer["pos_id"] = yId(player.get("primary_position_id", "-1"))
+    #     #         try:
+    #     #             self.insert("players", info=newPlayer)
+    #     #         except IntegrityError:
+    #     #             pass
+    #     # except KeyError:
+    #     #     pass
+
+
     def insertPlayer(self, info):
         playerId = yId(info["player_id"])
         firstName = info["first_name"]
         lastName = info["last_name"]
-        posId = yId(info["primary_position_id"])
+        try:
+            posId = yId(info["primary_position_id"])
+        except:
+            posId = -1
         teamId = yId(info["team_id"])
         uniNum = info["uniform_number"]
 
@@ -3302,11 +3528,11 @@ class NCAABDB(DB):
         for team in teams:
             self.insert("teams", info=team)
 
-        print("Seeding players\n")
-        self.insertPlayers()
-
-        print("Seeding boxscores\n")
-        self.insertBoxScores()
+        # print("Seeding players\n")
+        # self.insertPlayers()
+        #
+        # print("Seeding boxscores\n")
+        # self.insertBoxScores()
 
 
     def unknownPlayers(self):
@@ -3473,6 +3699,22 @@ class NCAABMatchDB(DB):
                     )
                 """,
                 """
+                    CREATE TABLE history_lines (
+                        team_id INT NOT NULL,
+                        opp_id INT NOT NULL,
+                        game_id INT NOT NULL,
+                        spread REAL NOT NULL,
+                        line INT NOT NULL,
+                        money INT NOT NULL,
+                        result INT NOT NULL,
+                        spread_outcome INT NOT NULL,
+                        money_outcome INT NOT NULL,
+                        PRIMARY KEY (team_id, game_id),
+                        FOREIGN KEY (team_id) REFERENCES teams (team_id),
+                        FOREIGN KEY (game_id) REFERENCES games (game_id)
+                    )
+                """,
+                """
                     CREATE TABLE over_unders (
                         game_id INT PRIMARY Key,
                         ou REAL NOT NULL,
@@ -3532,5 +3774,5 @@ class NCAABMatchDB(DB):
         for team in teams:
             self.insert("teams", info=team)
 
-        print("Seeding players\n")
-        self.insertPlayers()
+        # print("Seeding players\n")
+        # self.insertPlayers()

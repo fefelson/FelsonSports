@@ -162,7 +162,7 @@ class DatabaseManager(metaclass=ABCMeta):
 
     def insertPlayers(self):
         print("insertPlayers function")
-        tar = tarfile.open("/home/ededub/FEFelson/{}/players.tar.gz".format(self._abrv))
+        tar = tarfile.open("/home/ededub/FEFelson/{}/players.tar.xz".format(self._abrv))
         tar.extractall("/home/ededub/FEFelson/{}/temp".format(self._abrv))
         tar.close()
 
@@ -177,7 +177,7 @@ class DatabaseManager(metaclass=ABCMeta):
 
     def insertBoxScores(self):
 
-        tar = tarfile.open("/home/ededub/FEFelson/{}/boxscores.tar.gz".format(self._abrv))
+        tar = tarfile.open("/home/ededub/FEFelson/{}/boxscores.tar.xz".format(self._abrv))
         tar.extractall("/home/ededub/FEFelson/{}/temp".format(self._abrv))
         tar.close()
 
@@ -186,7 +186,6 @@ class DatabaseManager(metaclass=ABCMeta):
             [fileList.append(filePath+"/"+fileName) for fileName in fileNames if fileName != "scoreboard.json" and fileName[0] != "M"]
 
         for filePath, _, fileNames in os.walk("/home/ededub/FEFelson/{}/{}".format(self._abrv, self._season)):
-            print(fileList)
             [fileList.append(filePath+"/"+fileName) for fileName in fileNames if fileName != "scoreboard.json" and fileName != "schedule.json" and fileName[0] != "M"]
 
         for fileName in sorted(fileList, key=lambda x: int(x.split("/")[-1].split(".")[0])):

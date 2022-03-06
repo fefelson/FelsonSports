@@ -542,7 +542,7 @@ class MLB(League):
     _info = {
                 "leagueId": "mlb",
                 "slugId": "mlb",
-                "lastUpdate": "2021-11-04",
+                "lastUpdate": "2022-02-26",
                 "currentSeason": "2021",
                 "startDate": "2021-03-01",
                 "playoffs": "2021-10-04",

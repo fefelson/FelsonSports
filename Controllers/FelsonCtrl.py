@@ -6,6 +6,7 @@ import wx
 from .. import Environ as ENV
 
 from abc import ABCMeta, abstractmethod
+from collections import Counter
 from pprint import pprint
 from re import search, sub
 
@@ -72,6 +73,16 @@ class Model(metaclass=ABCMeta):
         pass
 
 
+    def getAndCmd(self, awayHome, tbl, *, wL=False):
+        # print("\nmodel getAndCmd")
+        if wL:
+            andCmd = "" if self.options["wL"] == "all" else "AND gd.{}_id = {}.{}_id".format(self.options["wL"], tbl, self.options["tO"])
+        else:
+            andCmd = "" if self.options["hA"] == "all" else "AND gd.{}_id = {}.{}_id".format(awayHome, tbl, self.options["tO"])
+        # print(andCmd)
+        return andCmd
+
+
     def getAndGLCmd(self, awayHome):
         # print("\nmodel getAndGLCmd")
         andGL = "" if self.options["hA"] == "all" else "AND gd.{}_id = gl.{}_id".format(awayHome, self.options["tO"])
@@ -100,16 +111,42 @@ class Model(metaclass=ABCMeta):
         return andWGL
 
 
-    @abstractmethod
-    def getBackgroundColor(self, key, stat, reverse):
-        pass
+    def getBackgroundColor(self, hA, label, key, value, reverse):
+        # print("hA "+hA, "label "+label, "key "+key)
+        color = "white"
+        colors = ["gold", "green", "pale green", "white", "pink", "red"]
+        values = [x for x in range(1,7)]
+        items = [x for x in range(1,6)]
+        if reverse:
+            values.reverse()
+        labelColors = dict(zip(values, colors))
+        # print("\n\ntO "+self.options["tO"], "reverse "+str(reverse), "stat "+key, "value "+str(value))
+        # pprint(labelColors)
+        # print("\n")
+        hA = self.options["hA"] if self.options["hA"] == "all" else hA
+        levels = self.report[label][self.options["tF"]][hA][key]
+
+        # pprint(levels)
+        try:
+            for k in items:
+                # print(value, levels[str(k)], value >= levels[str(k)])
+                if value >= float(levels[str(k)]):
+                    color = labelColors[k]
+                    break
+            if value < levels["5"]:
+                color = labelColors[6]
+        except TypeError:
+            pass
+        # print(color, "\n\n\n\n")
+        return color
 
 
     def getCommonOpps(self, awayHome):
+        # print(awayHome)
+        andTS = "" if self.options["hA"] == "all" else "AND gd.{}_id = ts.team_id"
+        andWL = "" if self.options["wL"] == "all" else "AND gd.{}_id = ts.team_id"
         info = self.getGame()
         gdCmd = self.getGDCmd()
-        andTS = self.getAndTSCmd(awayHome)
-        andWL = self.getAndWLCmd(awayHome)
         cmd = """
                 SELECT DISTINCT opp_id
                     FROM ( {0[gdCmd]} ) AS gd
@@ -118,11 +155,15 @@ class Model(metaclass=ABCMeta):
                     WHERE team_id = ?
                 """
 
+
         self.matchDB.openDB()
-        home = [x[0] for x in self.matchDB.fetchAll(cmd.format({"gdCmd":gdCmd, "andTS":andTS, "andWL":andWL}), (info["homeId"],) )]
-        away = [x[0] for x in self.matchDB.fetchAll(cmd.format({"gdCmd":gdCmd, "andTS":andTS, "andWL":andWL}), (info["awayId"],) )]
+        home = [x[0] for x in self.matchDB.fetchAll(cmd.format({"gdCmd":gdCmd, "andTS":andTS.format("home"), "andWL":andWL.format("home")}), (info["homeId"],) )]
+        away = [x[0] for x in self.matchDB.fetchAll(cmd.format({"gdCmd":gdCmd, "andTS":andTS.format("away"), "andWL":andWL.format("away")}), (info["awayId"],) )]
         self.matchDB.closeDB()
+        # pprint(home)
+        # pprint(away)
         opps = set(home) & set(away)
+        # print("\n\n\n")
         # print(opps)
         return list(opps)
 
@@ -231,7 +272,7 @@ class Controller(metaclass=ABCMeta):
         self.model.setDefaultOptions()
         self.setFrameOptions()
         self.changeFrame()
-        print(gameId)
+        print("game",gameId, end="\n\n")
 
 
     def changeOpponents(self, event):
@@ -274,7 +315,7 @@ class Controller(metaclass=ABCMeta):
 
 
     def changeFrame(self):
-        print("\nctrl changeFrame")
+        # print("\nctrl changeFrame")
         self.frame.panels['Game Log'].DestroyChildren()
         self.frame.panels['Injuries'].DestroyChildren()
 
@@ -284,7 +325,10 @@ class Controller(metaclass=ABCMeta):
         self.setPlayerStats()
         self.setGameLog()
         self.setGameLine()
+        self.setTotals()
         self.setGaming()
+        self.setTracking()
+        self.setHistory()
         self.frame.Layout()
 
 
@@ -385,6 +429,12 @@ class Controller(metaclass=ABCMeta):
         self.frame.panels["GameLine"].Layout()
 
 
+    def setTotals(self):
+        game = self.model.getGame()
+        self.frame.panels["Totals"].setPanel(game)
+        self.frame.panels["Totals"].Layout()
+
+
     @abstractmethod
     def setPlayerStats(self):
         pass
@@ -418,7 +468,7 @@ class Controller(metaclass=ABCMeta):
                         ON gd.game_id = gl.game_id {0[andGL]} {0[andWGL]}
                     INNER JOIN over_unders AS ov
                         ON gl.game_id = ov.game_id
-                    WHERE gl.{0[team]}_id = ? {0[whereGL]}
+                    WHERE gl.{0[team]}_id = ? {0[whereGL]} AND ou > 0
                 """
 
         gdCmd = self.model.getGDCmd()
@@ -444,7 +494,113 @@ class Controller(metaclass=ABCMeta):
                         panel[key].SetLabel("{:3.2f}".format(value))
                 except (ZeroDivisionError, TypeError):
                     panel[key].SetLabel("--")
+                if self.model.options["tO"] == "team":
+                    reverse = True if key in ("atsL",) else False
+                else:
+                    reverse = False if key in ("atsL",) else True
+
+                if key in ("money$", "ats$", "over$", "under$"):
+                    color = self.model.getBackgroundColor(hA, "teamGaming", key, result, reverse)
+                else:
+                    color = self.model.getBackgroundColor(hA, "teamGaming", key, value, reverse)
+                textColor = "black"
+                if color in ('green', 'red'):
+                    textColor = "white"
+                panel[key].SetBackgroundColour(wx.Colour(color))
+                panel[key].SetForegroundColour(wx.Colour(textColor))
+
         self.frame.panels['Gaming'].Layout()
+
+
+    def setHistory(self):
+        spreadCmd = """
+                    SELECT result, spread_outcome, money_outcome
+                        FROM history_lines AS gl
+                        WHERE spread = ?
+                    """
+
+        ouCmd = """
+                    SELECT total, outcome
+                        FROM over_unders
+                        WHERE ou = ?
+                    """
+
+        info = {"spread":{}, "overUnder":{}}
+        game = self.model.getGame()
+        info["spread"]["i"] = float(game["odds"][-1]["99"]["home_spread"])
+        info["overUnder"]["ou"] = float(game["odds"][-1]["99"]["total"])
+
+        if info["spread"]["i"] < 0:
+            info["spread"]["spread"] = str(info["spread"]["i"])
+        else:
+            info["spread"]["spread"] = "+"+str(info["spread"]["i"])
+
+
+        self.model.matchDB.openDB()
+        spreadResults = self.model.matchDB.fetchAll(spreadCmd, (info["spread"]["i"],))
+        ouResults = self.model.matchDB.fetchAll(ouCmd, (info["overUnder"]["ou"],))
+        self.model.matchDB.closeDB()
+
+        spreadOutcome = [x[1] for x in spreadResults]
+        spreadBoxes  = [x[0] for x in spreadResults]
+        money = [x[2] for x in spreadResults]
+
+        ouOutcome = [x[1] for x in ouResults]
+        ouBoxes  = [x[0] for x in ouResults]
+
+        spreadCount = Counter(spreadBoxes)
+        ouCount = Counter(ouBoxes)
+
+        overs = 0
+        unders = 0
+        ouPush = 0
+
+        wins = 0
+        loss = 0
+        push = 0
+        m = 0
+
+        for x in spreadOutcome:
+            if x == 1:
+                wins += 1
+            elif x == -1:
+                loss += 1
+            else:
+                push += 1
+
+        for x in money:
+            if x == 1:
+                m += 1
+
+
+        for x in ouOutcome:
+            if x == 1:
+                overs += 1
+            elif x == -1:
+                unders += 1
+            else:
+                ouPush += 1
+
+        info["spread"]["spreadResults"] = spreadResults
+        info["spread"]["spreadOutcome"] = spreadOutcome
+        info["spread"]["spreadCount"] = spreadCount
+        info["spread"]["spreadBoxes"] = spreadBoxes
+        info["spread"]["wins"] = wins
+        info["spread"]["loss"] = loss
+        info["spread"]["push"] = push
+        info["spread"]["m"] = m
+
+        info["overUnder"]["ouResults"] = ouResults
+        info["overUnder"]["ouOutcome"] = ouOutcome
+        info["overUnder"]["ouBoxes"] = ouBoxes
+        info["overUnder"]["ouCount"] = ouCount
+        info["overUnder"]["overs"] = overs
+        info["overUnder"]["unders"] = unders
+        info["overUnder"]["ouPush"] = ouPush
+
+
+        self.frame.panels["History"].setPanel(info)
+        self.frame.panels["History"].Layout()
 
 
     def setInjuries(self):
@@ -465,3 +621,29 @@ class Controller(metaclass=ABCMeta):
     @abstractmethod
     def setTeamStats(self):
         pass
+
+
+    def setTracking(self):
+        cmd = """
+                SELECT spread+result, money_outcome
+                    FROM game_lines AS gl
+                    INNER JOIN games AS g
+                        ON gl.game_id = g.game_id
+                    INNER JOIN over_unders AS ov
+                        ON gl.game_id = ov.game_id
+                    WHERE team_id = ? AND ou > 0
+                    ORDER BY g.game_id
+                """
+
+        info = {}
+        game = self.model.getGame()
+        self.model.matchDB.openDB()
+        for hA in ("away", "home"):
+            info[hA] = {}
+            info[hA]["name"] = self.model.matchDB.fetchItem("SELECT first_name || ' '  || last_name FROM teams WHERE team_id = ?", (game["{}Id".format(hA)],))
+            tmp = self.model.matchDB.fetchAll(cmd, (game["{}Id".format(hA)], ))
+            info[hA]["data"] = [x[0] for x in tmp]
+            info[hA]["money"] = [x[1] for x in tmp]
+        self.model.matchDB.closeDB()
+        self.frame.panels["Tracking"].setPanel(info)
+        self.frame.panels["Tracking"].Layout()

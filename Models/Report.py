@@ -530,11 +530,11 @@ class Report(Fileable):
         sDict = {}
 
 
-        sDict[1] = values[int(.1*len(values))]
-        sDict[2] = values[int(.2*len(values))]
-        sDict[3] = values[int(.4*len(values))]
-        sDict[4] = values[int(.6*len(values))]
-        sDict[5] = values[int(.8*len(values))]
+        sDict[1] = values[int(.9*len(values))]
+        sDict[2] = values[int(.8*len(values))]
+        sDict[3] = values[int(.6*len(values))]
+        sDict[4] = values[int(.4*len(values))]
+        sDict[5] = values[int(.2*len(values))]
 
         return sDict.copy()
 
@@ -544,10 +544,10 @@ class Report(Fileable):
         sDict = {}
 
 
-        sDict[1] = values[int(.05*len(values))]
-        sDict[2] = values[int(.1*len(values))]
-        sDict[3] = values[int(.2*len(values))]
-        sDict[4] = values[int(.4*len(values))]
+        sDict[1] = values[int(.95*len(values))]
+        sDict[2] = values[int(.9*len(values))]
+        sDict[3] = values[int(.8*len(values))]
+        sDict[4] = values[int(.7*len(values))]
         sDict[5] = values[int(.6*len(values))]
 
         return sDict.copy()
@@ -558,11 +558,11 @@ class Report(Fileable):
         sDict = {}
 
 
-        sDict[1] = values[int(.1*len(values))]
-        sDict[2] = values[int(.2*len(values))]
-        sDict[3] = values[int(.4*len(values))]
-        sDict[4] = values[int(.6*len(values))]
-        sDict[5] = values[int(.8*len(values))]
+        sDict[1] = values[int(.9*len(values))]
+        sDict[2] = values[int(.8*len(values))]
+        sDict[3] = values[int(.6*len(values))]
+        sDict[4] = values[int(.4*len(values))]
+        sDict[5] = values[int(.2*len(values))]
 
         return sDict.copy()
 
@@ -572,11 +572,11 @@ class Report(Fileable):
         sDict = {}
 
         try:
-            sDict[1] = values[int(.1*len(values))]
-            sDict[2] = values[int(.2*len(values))]
-            sDict[3] = values[int(.4*len(values))]
+            sDict[1] = values[int(.95*len(values))]
+            sDict[2] = values[int(.9*len(values))]
+            sDict[3] = values[int(.8*len(values))]
             sDict[4] = values[int(.6*len(values))]
-            sDict[5] = values[int(.8*len(values))]
+            sDict[5] = values[int(.5*len(values))]
         except IndexError:
             pass
 
@@ -928,6 +928,13 @@ class NBAReport(Report):
                                 result = x[stat]
                                 data.append({stat:((result-total)/total)*100})
                             self.info["teamGaming"][tF][hA][stat] = self.score(stat, data)
+                        elif stat in ("over$", "under$"):
+                            data = []
+                            for x in gameData:
+                                total = (x["atsW"]+x["atsL"]+x["atsP"])*100
+                                result = x[stat]
+                                data.append({stat:((result-total)/total)*100})
+                            self.info["teamGaming"][tF][hA][stat] = self.score(stat, data)
                         else:
                             self.info["teamGaming"][tF][hA][stat] = self.score(stat, gameData)
                     except IndexError:
@@ -997,6 +1004,13 @@ class NCAABReport(Report):
                                 result = x[stat]
                                 data.append({stat:((result-total)/total)*100})
                             self.info["teamGaming"][tF][hA][stat] = self.score(stat, data)
+                        elif stat in ("over$", "under$"):
+                            data = []
+                            for x in gameData:
+                                total = (x["atsW"]+x["atsL"]+x["atsP"])*100
+                                result = x[stat]
+                                data.append({stat:((result-total)/total)*100})
+                            self.info["teamGaming"][tF][hA][stat] = self.score(stat, data)
                         else:
                             self.info["teamGaming"][tF][hA][stat] = self.score(stat, gameData)
                     except IndexError:
@@ -1007,11 +1021,26 @@ class NCAABReport(Report):
                 playerData = [dict(zip(playerStatList, player)) for player in self.league.dbManager.fetchAll(ncaabPlayerStatCmd.format({"gdCmd":gdCmd, "andTS":andTS}))]
 
                 for label in teamStatList:
+                    # print(label)
                     self.info["teamStats"][tF][hA][label] = self.teamScore(label, teamData)
 
 
                 for label in playerStatList:
                     self.info["playerStats"][tF][hA][label] = self.playerScore(label, playerData)
+
+
+    def playerScore(self, stat, data):
+        values = sorted([x[stat] for x in data if x[stat]])
+        sDict = {}
+
+
+        sDict[1] = values[int(.99*len(values))]
+        sDict[2] = values[int(.9*len(values))]
+        sDict[3] = values[int(.8*len(values))]
+        sDict[4] = values[int(.7*len(values))]
+        sDict[5] = values[int(.6*len(values))]
+
+        return sDict.copy()
 
 
 ################################################################################

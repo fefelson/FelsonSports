@@ -5,7 +5,7 @@ import json
 import datetime
 import math
 
-from .Database import Database as DB, yId, normal
+from ..Models import DatabaseManager as DB, yId, normal
 from ..Utils import SQL
 
 from pprint import pprint
@@ -58,7 +58,6 @@ leagues = [{'league_id': 'fbde', 'title': 'Bundesliga'},
              {'league_id': 'fbfacup', 'title': 'FA Cup'},
              {'league_id': 'fbes', 'title': 'La Liga'},
              {'league_id': 'fbeuropa', 'title': 'Europa League'},
-             {'league_id': 'fbcopadelrey', 'title': 'Copa Del Ray'},
              {'league_id': 'fbchampions', 'title': 'Champions League'},
              {'league_id': 'fbit', 'title': 'Serie A'},
              {'league_id': 'fbleaguecup', 'title': 'League Cup'},
@@ -66,10 +65,7 @@ leagues = [{'league_id': 'fbde', 'title': 'Bundesliga'},
              {'league_id': 'mls', 'title': 'Major League Soccer'},
              {'league_id': 'fbcoppait', 'title': 'Italian Cup'},
              {'league_id': 'fbdfbpokal', 'title': 'DFB Pokal'},
-             {'league_id': 'fbeusc', 'title': 'European Super Cup'},
-             {'league_id': 'fbesspcopa', 'title': 'Spanish Super Cup'},
-             {'league_id': 'fbcomshield', 'title': 'Community Shield'},
-             {'league_id': 'fbigus', 'title': 'MLS All-Star Game'}]
+            ]
 
 
 teams = [{'abrv': 'CHI',
@@ -1703,7 +1699,7 @@ class SOCCERDB(DB):
                 )
 
     def __init__(self):
-        super().__init__()
+        super().__init__(DB._dbPath.format(self._abrv))
 
 
     def insertGame(self, gameInfo):
@@ -1796,19 +1792,19 @@ class SOCCERDB(DB):
         for stat in statTypes:
             self.insert("stat_types", info=stat)
 
-        playerPath = "/home/ededub/Yahoo/soccer/players/"
-        gamePath = "/home/ededub/Yahoo/soccer/2019/"
-
-        for fileName in [playerPath+fileName for fileName in os.listdir(playerPath)]:
-            with open(fileName) as fileIn:
-                info = json.load(fileIn)
-            self.insert("players", info=info)
-
-        for fileName in [gamePath+fileName for fileName in os.listdir(gamePath)]:
-            print(fileName)
-            with open(fileName) as fileIn:
-                info = json.load(fileIn)
-            self.insertGame(info)
+        # playerPath = "/home/ededub/Yahoo/soccer/players/"
+        # gamePath = "/home/ededub/Yahoo/soccer/2019/"
+        #
+        # for fileName in [playerPath+fileName for fileName in os.listdir(playerPath)]:
+        #     with open(fileName) as fileIn:
+        #         info = json.load(fileIn)
+        #     self.insert("players", info=info)
+        #
+        # for fileName in [gamePath+fileName for fileName in os.listdir(gamePath)]:
+        #     print(fileName)
+        #     with open(fileName) as fileIn:
+        #         info = json.load(fileIn)
+        #     self.insertGame(info)
 
         # self.insertPlayers()
         # self.insertBoxScores()

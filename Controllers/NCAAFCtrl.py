@@ -219,7 +219,7 @@ class NCAAFCtrl(Controller):
 
     def setTitle(self):
         super().setTitle()
-        print("\nncaafctrl setTitle")
+        # print("\nncaafctrl setTitle")
 
 
         recordCmd = """

@@ -88,6 +88,7 @@ class League(metaclass=ABCMeta):
                     except IntegrityError:
                         print("insertGame IntegrityError")
                 self.fileManager.update(newDate)
+
             self.report.create()
 
             try:

@@ -344,9 +344,9 @@ teams = [{'abrv': 'MIN',
   ]
 
 
-class NBADB(DB):
+class WNBADB(DB):
 
-    _abrv = "nba"
+    _abrv = "wnba"
 
     _schema = ("""
                     CREATE TABLE games (
@@ -875,8 +875,8 @@ class NBADB(DB):
 #################################################################################
 
 
-class NBAMatchDB(DB):
-    _abrv = "nba"
+class WNBAMatchDB(DB):
+    _abrv = "wnba"
 
     _schema = ("""
                     CREATE TABLE games (

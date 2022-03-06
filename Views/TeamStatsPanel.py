@@ -131,9 +131,7 @@ class NCAAFTeamStatsPanel(wx.ScrolledWindow):
             passStatSizer = wx.BoxSizer()
 
             compSizer = wx.BoxSizer(wx.VERTICAL)
-            compSizer.Add(paCompLabel, 0, wx.CENTER | wx.BOTTOM, 10)
-            compSizer.Add(self.values[hA]["TmPaComp"], 1, wx.CENTER)
-
+            
             paCompSizer = self.xSizer(paCompLabel, self.values[hA]["TmPaComp"])
             paAttSizer = self.xSizer(paAttLabel, self.values[hA]["TmPaAtt"])
             paYdsSizer = self.xSizer(paYdsLabel, self.values[hA]["TmPaYds"])

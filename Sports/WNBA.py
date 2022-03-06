@@ -1,4 +1,4 @@
-from ..DB import NBADB
+from ..DB import WNBADB
 from ..Models import (DailyBoxScore, DailyFileManager, DailyMatchup, DailySchedule,
                         NBAPlayer, League, NBAReport)
 
@@ -15,15 +15,15 @@ currentSeason = 2021
 
 
 
-class NBA(League):
+class WNBA(League):
 
     _boxScore = DailyBoxScore
-    _dbManager = NBADB
+    _dbManager = WNBADB
     _fileManager = DailyFileManager
     _info = {
-                "leagueId": "nba",
-                "slugId": "nba",
-                "lastUpdate": "2022-02-26",
+                "leagueId": "wnba",
+                "slugId": "wnba",
+                "lastUpdate": "2020-04-26",
                 "currentSeason": currentSeason,
                 "startDate": "2021-10-19",
                 "playoffs": "2022-04-11",

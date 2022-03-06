@@ -888,31 +888,33 @@ class MLBDB(DB):
                 # Team Stats Table
                 for teamId, oppId in ((homeId, awayId),(awayId, homeId)):
                     statsData = gameInfo["statsData"]["teamStatsByGameId"]['mlb.g.{}'.format(gameId)]["mlb.t.{}".format(teamId)]['mlb.stat_variation.2']
+                    try:
+                        teamStats = {}
+                        teamStats["team_id"] = teamId
+                        teamStats["game_id"] = gameId
+                        teamStats["opp_id"] = oppId
+                        teamStats["ab"] = statsData["mlb.stat_type.406"]
+                        teamStats["bb"] = statsData["mlb.stat_type.415"]
+                        teamStats["r"] = statsData["mlb.stat_type.402"]
+                        teamStats["h"] = statsData["mlb.stat_type.403"]
+                        teamStats["hr"] = statsData["mlb.stat_type.404"]
+                        teamStats["rbi"] = statsData["mlb.stat_type.405"]
+                        teamStats["sb"] = statsData["mlb.stat_type.409"]
+                        teamStats["so"] = statsData["mlb.stat_type.411"]
+                        teamStats["lob"] = statsData["mlb.stat_type.416"]
+                        inn,third = [int(x) for x in statsData["mlb.stat_type.512"].split(".")]
+                        third = third*3333
+                        teamStats["ip"] = float("{}.{}".format(inn, third))
+                        teamStats["bba"] = statsData["mlb.stat_type.503"]
+                        teamStats["ra"] = statsData["mlb.stat_type.505"]
+                        teamStats["ha"] = statsData["mlb.stat_type.502"]
+                        teamStats["hra"] = statsData["mlb.stat_type.507"]
+                        teamStats["er"] = statsData["mlb.stat_type.506"]
+                        teamStats["k"] = statsData["mlb.stat_type.504"]
 
-                    teamStats = {}
-                    teamStats["team_id"] = teamId
-                    teamStats["game_id"] = gameId
-                    teamStats["opp_id"] = oppId
-                    teamStats["ab"] = statsData["mlb.stat_type.406"]
-                    teamStats["bb"] = statsData["mlb.stat_type.415"]
-                    teamStats["r"] = statsData["mlb.stat_type.402"]
-                    teamStats["h"] = statsData["mlb.stat_type.403"]
-                    teamStats["hr"] = statsData["mlb.stat_type.404"]
-                    teamStats["rbi"] = statsData["mlb.stat_type.405"]
-                    teamStats["sb"] = statsData["mlb.stat_type.409"]
-                    teamStats["so"] = statsData["mlb.stat_type.411"]
-                    teamStats["lob"] = statsData["mlb.stat_type.416"]
-                    inn,third = [int(x) for x in statsData["mlb.stat_type.512"].split(".")]
-                    third = third*3333
-                    teamStats["ip"] = float("{}.{}".format(inn, third))
-                    teamStats["bba"] = statsData["mlb.stat_type.503"]
-                    teamStats["ra"] = statsData["mlb.stat_type.505"]
-                    teamStats["ha"] = statsData["mlb.stat_type.502"]
-                    teamStats["hra"] = statsData["mlb.stat_type.507"]
-                    teamStats["er"] = statsData["mlb.stat_type.506"]
-                    teamStats["k"] = statsData["mlb.stat_type.504"]
-
-                    self.insert("team_stats", info=teamStats)
+                        self.insert("team_stats", info=teamStats)
+                    except KeyError:
+                        pass
 
                 # Play Tables
                 pitchTemp = {"HBP":0, "SB":0, "CS":0, "TOT":0, "STK":0, "GB":0, "FB":0}
@@ -1223,10 +1225,10 @@ class MLBDB(DB):
         for pos in positions:
             self.insert("position_types", info=pos)
 
-        print("Seeding players\n")
-        self.insertPlayers()
-
-        print("Seeding boxscores\n")
+        # print("Seeding players\n")
+        # self.insertPlayers()
+        #
+        # print("Seeding boxscores\n")
         self.insertBoxScores()
 
 

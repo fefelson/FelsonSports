@@ -133,7 +133,7 @@ class WeeklyFileManager(FileManager):
         #
         # print("Final Update", update)
         # raise
-        return False
+        return True
 
     def update(self, newUpdate):
         self.info["updateWeek"] = self.getWeek(newUpdate)
@@ -164,7 +164,7 @@ class WeeklyFileManager(FileManager):
         while lastUpdate < today:
             newUpdates.append(lastUpdate)
             lastUpdate += timedelta(7)
-
+        pprint(newUpdates)
         return newUpdates
 
 

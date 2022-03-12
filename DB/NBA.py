@@ -9,7 +9,7 @@ from ..Models import DatabaseManager as DB, yId, normal
 from ..Utils import SQL
 
 from pprint import pprint
-
+from sqlite3 import IntegrityError
 
 def getBox(shot):
     basePct = shot["baseline_offset_percentage"] * ((-1) ** int(shot["side_of_basket"] == "R"))
@@ -416,13 +416,13 @@ class NBADB(DB):
                 """,
                 """
                     CREATE TABLE lineups (
-                        lineup_id INT PRIMARY KEY,
                         game_id INT NOT NULL,
                         player_id INT NOT NULL,
                         team_id INT NOT NULL,
                         opp_id INT NOT NULL,
                         starter INT NOT NULL,
                         active INT NOT NULL,
+                        PRIMARY KEY(game_id, player_id),
                         FOREIGN KEY (game_id) REFERENCES games (game_id),
                         FOREIGN KEY (player_id) REFERENCES players (player_id),
                         FOREIGN KEY (team_id) REFERENCES teams (team_id),
@@ -669,7 +669,10 @@ class NBADB(DB):
                         oppId = -1
                     active = value.get("active", -1)
                     starter = value.get("starter", -1)
-                    self.insert("lineups", values=[None, gameId, playerId, teamId, oppId, starter, active])
+                    try:
+                        self.insert("lineups", values=[gameId, playerId, teamId, oppId, starter, active])
+                    except IntegrityError:
+                        print([gameId, playerId, teamId, oppId, starter, active])
         except TypeError:
             pass
 
@@ -833,9 +836,9 @@ class NBADB(DB):
         except IndexError:
             birthYear = -1
             birthDay = -1
-            draftYear = info["draft"]["season"]
+            draftYear = None
             draftPick = None
-            draftTeam = info["draft"]["team_id"]
+            draftTeam = None
 
 
         college = info.get("college", None)
@@ -857,7 +860,7 @@ class NBADB(DB):
             self.insert("teams", info=team)
 
         print("Seeding players\n")
-        # self.insertPlayers()
+        self.insertPlayers()
         print("Seeding boxscores\n")
         self.insertBoxScores()
 
@@ -946,13 +949,13 @@ class NBAMatchDB(DB):
                 """,
                 """
                     CREATE TABLE lineups (
-                        lineup_id INT PRIMARY KEY,
                         game_id INT NOT NULL,
                         player_id INT NOT NULL,
                         team_id INT NOT NULL,
                         opp_id INT NOT NULL,
                         starter INT NOT NULL,
                         active INT NOT NULL,
+                        PRIMARY KEY(game_id, player_id)
                         FOREIGN KEY (game_id) REFERENCES games (game_id),
                         FOREIGN KEY (player_id) REFERENCES players (player_id),
                         FOREIGN KEY (team_id) REFERENCES teams (team_id),

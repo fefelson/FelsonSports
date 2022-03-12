@@ -294,6 +294,7 @@ bballPlayerStatCmd = """
                             INNER JOIN lineups
                                 ON ts.game_id = lineups.game_id AND ts.player_id = lineups.player_id
                             GROUP BY ts.player_id
+                            HAVING AVG(mins) >= 10
             """
 
 

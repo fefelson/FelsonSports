@@ -2969,13 +2969,13 @@ class NCAABDB(DB):
                 """,
                 """
                     CREATE TABLE lineups (
-                        lineup_id INT PRIMARY KEY,
                         game_id INT NOT NULL,
                         player_id INT NOT NULL,
                         team_id INT NOT NULL,
                         opp_id INT NOT NULL,
                         line_order INT NOT NULL,
                         starter INT NOT NULL,
+                        PRIMARY KEY(game_id, player_id),
                         FOREIGN KEY (game_id) REFERENCES games (game_id),
                         FOREIGN KEY (player_id) REFERENCES players (player_id),
                         FOREIGN KEY (team_id) REFERENCES teams (team_id),
@@ -3168,7 +3168,10 @@ class NCAABDB(DB):
                         oppId = -1
                     starter = value["starter"]
                     order = value["order"]
-                    self.insert("lineups", values=[None, gameId, playerId, teamId, oppId, order, starter])
+                    try:
+                        self.insert("lineups", values=[gameId, playerId, teamId, oppId, order, starter])
+                    except IntegrityError:
+                        pass
 
         except (KeyError, TypeError):
             pass
@@ -3532,7 +3535,7 @@ class NCAABDB(DB):
         # self.insertPlayers()
         #
         # print("Seeding boxscores\n")
-        # self.insertBoxScores()
+        self.insertBoxScores()
 
 
     def unknownPlayers(self):
@@ -3604,13 +3607,13 @@ class NCAABMatchDB(DB):
                 """,
                 """
                     CREATE TABLE lineups (
-                        lineup_id INT PRIMARY KEY,
                         game_id INT NOT NULL,
                         player_id INT NOT NULL,
                         team_id INT NOT NULL,
                         opp_id INT NOT NULL,
                         line_order INT NOT NULL,
                         starter INT NOT NULL,
+                        PRIMARY KEY(game_id, player_id),
                         FOREIGN KEY (game_id) REFERENCES games (game_id),
                         FOREIGN KEY (player_id) REFERENCES players (player_id),
                         FOREIGN KEY (team_id) REFERENCES teams (team_id),

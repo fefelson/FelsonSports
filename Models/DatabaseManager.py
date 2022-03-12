@@ -180,7 +180,12 @@ class DatabaseManager(metaclass=ABCMeta):
             with open(player) as fileIn:
                 info = json.load(fileIn)
             self.insertPlayer(info)
-        [os.remove(ENV.tempDir.format(self._abrv)+ "/{}".format(x)) for x in os.listdir(ENV.tempDir.format(self._abrv))]
+        for player in os.listdir("/home/ededub/FEFelson/nba/Players/"):
+            with open("/home/ededub/FEFelson/nba/Players/"+player) as fileIn:
+                info = json.load(fileIn)
+            self.insertPlayer(info)
+        [shutil.rmtree(ENV.tempDir.format(self._abrv)+"/{}".format(x)) for x in os.listdir(ENV.tempDir.format(self._abrv))]
+
 
 
     def insertPlayer(self, info):
